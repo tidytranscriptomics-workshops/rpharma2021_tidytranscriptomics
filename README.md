@@ -33,7 +33,7 @@ If you want to install the packages and material post-workshop, the instructions
 Sys.setenv("R_REMOTES_NO_ERRORS_FROM_WARNINGS" = "true")
 
 # Install workshop package
-remotes::install_github("stemangiola/rpharma2021_tidytranscriptomics", build_vignettes = TRUE)
+remotes::install_github("tidytranscriptomics-workshops/rpharma2021_tidytranscriptomics", build_vignettes = TRUE)
 
 # To view vignettes
 library(rpharma2021tidytranscriptomics)
