@@ -1,7 +1,7 @@
 on: [push]
 
 env:
-  cache-version: v2
+  cache-version: v1
   repo-name: stemangiola/rpharma2021_tidytranscriptomics
 
 jobs:
@@ -15,11 +15,6 @@ jobs:
         run: |
           ## To fix preprocessCore error https://github.com/stemangiola/tidybulk/issues/145
           BiocManager::install("preprocessCore", configure.args="--disable-threading")
-          
-          # We'll install the specific versions from the install instructions
-          BiocManager::install("stemangiola/tidybulk@v1.4.0")
-          BiocManager::install("stemangiola/tidySummarizedExperiment@v1.2.0")
-          BiocManager::install("stemangiola/tidySingleCellExperiment@v1.3.0")
 
           # Then install the other dependencies in the usual way
           BiocManager::install(ask=FALSE)
