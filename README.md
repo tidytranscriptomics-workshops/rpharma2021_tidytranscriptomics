@@ -5,7 +5,7 @@
 
 # Introduction to Tidy Transcriptomics
 <p float="left">
-<img height="100" alt="rpharma2021" src="man/figures/RPharma2021-virtual.png"/>
+<img height="100" alt="rpharma2021" src="man/figures/rpharma_logo.png"/>
 <img height="100" alt="tidybulk" src="https://github.com/Bioconductor/BiocStickers/blob/master/tidybulk/tidybulk.png?raw=true"/>
 </p>
 
@@ -24,7 +24,7 @@ More details on the workshop are below.
 
 For the RPharma2021 workshop, an RStudio in the cloud will be provided with everything installed, all that participants will need is a web browser. 
 
-If you want to install the packages and material post-workshop, the instructions are below. The workshop is designed for R `4.1`.
+If you want to install the packages and material post-workshop, the instructions are below. The workshop is designed for R `4.1` and Bioconductor 3.14.
 
 ```
 #install.packages('remotes')
@@ -32,12 +32,8 @@ If you want to install the packages and material post-workshop, the instructions
 # Need to set this to prevent installation erroring due to even tiny warnings, similar to here: https://github.com/r-lib/remotes/issues/403#issuecomment-748181946
 Sys.setenv("R_REMOTES_NO_ERRORS_FROM_WARNINGS" = "true")
 
-# Install same versions used in the workshop
-#install.packages("remotes")
-remotes::install_github(c("stemangiola/tidybulk@v1.4.0", "stemangiola/tidySummarizedExperiment@v1.2.0", "stemangiola/tidySingleCellExperiment@v1.3.0"))
-
 # Install workshop package
-remotes::install_github("stemangiola/rpharma2021_tidytranscriptomics", build_vignettes = TRUE)
+remotes::install_github("tidytranscriptomics-workshops/rpharma2021_tidytranscriptomics", build_vignettes = TRUE)
 
 # To view vignettes
 library(rpharma2021tidytranscriptomics)
@@ -54,16 +50,18 @@ This can be achieved with the integration of packages present in the R CRAN and 
 
 ### Pre-requisites
 
-* Basic knowledge of RStudio
-* Some familiarity with tidyverse syntax
+* Familiarity with tidyverse syntax
 * Some familiarity with bulk RNA-seq and single cell RNA-seq
 
-Recommended Background Reading
-[Introduction to R for Biologists](https://melbournebioinformatics.github.io/r-intro-biologists/intro_r_biologists.html)
+Strongly recommended background reading:
+
+https://melbournebioinformatics.github.io/r-intro-biologists/intro_r_biologists.html
+https://towardsdatascience.com/coding-in-r-nest-and-map-your-way-to-efficient-code-4e44ba58ee4a by Rebecca O’Dwyer
+https://finnstats.com/index.php/2021/04/02/tidyverse-in-r/
 
 ### Workshop Participation
 
-The workshop format is a 4 hour session consisting of hands-on demos, exercises and Q&A.
+The workshop format is a 3 hour session consisting of hands-on demos, exercises and Q&A.
 
 ### _R_ / _Bioconductor_ packages used
 
@@ -90,13 +88,11 @@ Guide
 |  *Hands-on Demos + Exercises*                           |  90m |
 |      Differential gene expression                       |      |
 |      Cell type composition analysis                     |      |
-| _Break_                                                 |  30m |
 | **Part 2 Single-cell RNA-seq**                          |      |
 |  *Hands-on Demos + Exercises*                           |  90m |
 |      Single-cell analysis                               |      |
 |      Pseudobulk analysis                                |      |
-| _Q&A_                                                   |  30m |
-| Total                                                   | 240m |
+| Total                                                   | 180m |
 
 ### Workshop goals and objectives
 
