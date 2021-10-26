@@ -794,18 +794,18 @@ Similar to what we saw with tidySummarizedExperiment, `tidySingleCellExperiment`
 
 ```{r}
 # load pbmc single cell RNA sequencing data
-pbmc <- rpharma2021tidytranscriptomics::pbmc
-
-# take a look
-pbmc
+# pbmc <- rpharma2021tidytranscriptomics::pbmc
+# 
+# # take a look
+# pbmc
 ```
 
 If we load the *tidySingleCellExperiment* package and then view the PBMC data, it displays as a tibble.
 
 ```{r}
-library(tidySingleCellExperiment)
-
-pbmc
+# library(tidySingleCellExperiment)
+# 
+# pbmc
 ```
 
 
@@ -813,7 +813,7 @@ pbmc
 It can be interacted with using [SingleCellExperiment commands](https://bioconductor.org/packages/release/bioc/vignettes/SingleCellExperiment/inst/doc/intro.html) such as `assayNames`.
 
 ```{r}
-assayNames(pbmc)
+# assayNames(pbmc)
 ```
 
 We can also interact with our object as we do with any tidyverse tibble.
@@ -825,22 +825,22 @@ And now we can also use tidyverse commands, such as `filter`, `select` and `muta
 We can use `filter` to choose rows, for example, to see just the rows for the treated samples.
 
 ```{r}
-pbmc %>% filter(ident == "G1")
+# pbmc %>% filter(ident == "G1")
 ```
 
 We can use `select` to choose columns, for example, to see the sample, cell, total cellular RNA
 
 ```{r}
-pbmc %>% select(cell, nCount_RNA , ident)
+# pbmc %>% select(cell, nCount_RNA , ident)
 ```
 
 We can use `mutate` to create a column. For example, we could create a new sample_name column that contains shorter sample names. We can remove the SRR1039 prefix that's present in all of the samples, as shorter names can fit better in some of the plots we will create. We can use `mutate` together with `str_replace` to remove the SRR1039 string from the sample column.
 
 ```{r}
-pbmc %>%
-  mutate(ident_l=tolower(ident)) %>%
-  # select columns to view    
-  select(ident, ident_l)
+# pbmc %>%
+#   mutate(ident_l=tolower(ident)) %>%
+#   # select columns to view    
+#   select(ident, ident_l)
 ```
 
 
@@ -849,7 +849,7 @@ pbmc %>%
 We can join datasets as if they were tibbles
 
 ```{r}
-pbmc %>% bind_rows(pbmc)
+# pbmc %>% bind_rows(pbmc)
 ```
 
 
@@ -860,22 +860,22 @@ In this case, we want to polish an annotation column. We will extract the sample
 
 ```{r}
 # First take a look at the file column
-pbmc %>% select(file)
+# pbmc %>% select(file)
 ```
 
 ```{r}
 # Create columns for sample, dataset and groups
-pbmc <-
-  pbmc %>%
-
-  # Extract sample and group
-  extract(file, "sample", "../data/([a-zA-Z0-9_]+)/outs.+", remove = FALSE) %>%
-
-  # Extract data source
-  extract(file, c("dataset", "groups"), "../data/([a-zA-Z0-9_]+)_([0-9])/outs.+")
-
-# Take a look
-pbmc %>% select(sample, dataset, groups)
+# pbmc <-
+#   pbmc %>%
+# 
+#   # Extract sample and group
+#   extract(file, "sample", "../data/([a-zA-Z0-9_]+)/outs.+", remove = FALSE) %>%
+# 
+#   # Extract data source
+#   extract(file, c("dataset", "groups"), "../data/([a-zA-Z0-9_]+)_([0-9])/outs.+")
+# 
+# # Take a look
+# pbmc %>% select(sample, dataset, groups)
 ```
 
 ## Quality control
@@ -885,47 +885,47 @@ A key quality control step performed in single-cell analyses is the assessment o
 We'll first show the mitochondrial analysis for one of the 10 datasets.
 
 ```{r}
-one_dataset <- pbmc %>% filter(dataset =="GSE115189")
+# one_dataset <- pbmc %>% filter(dataset =="GSE115189")
 ```
 
 We get the chromosomal location for each gene in the dataset so we can identify the mitochondrial genes. We'll get a warning that some of the ids don't find a match, but it should be just a small proportion.
 
 ```{r}
-location <- mapIds(
-  EnsDb.Hsapiens.v86,
-  keys = rownames(one_dataset),
-  column = "SEQNAME",
-  keytype = "SYMBOL"
-)
+# location <- mapIds(
+#   EnsDb.Hsapiens.v86,
+#   keys = rownames(one_dataset),
+#   column = "SEQNAME",
+#   keytype = "SYMBOL"
+# )
 ```
 
 Next we calculate the mitchondrial content for each cell in the dataset.
 
 ```{r}
-mito_info_one_dataset <- perCellQCMetrics(one_dataset, subsets = list(Mito = which(location == "MT")))
-
-mito_info_one_dataset
+# mito_info_one_dataset <- perCellQCMetrics(one_dataset, subsets = list(Mito = which(location == "MT")))
+# 
+# mito_info_one_dataset
 ```
 
 We then label the cells with high mitochondrial content as outliers.
 
 ```{r}
-mito_info_one_dataset <- mito_info_one_dataset %>%
-      # Converting to tibble
-      as_tibble(rownames = "cell") %>%
-
-      # Label cells with high mitochondrial content
-      mutate(high_mitochondrion = isOutlier(subsets_Mito_percent, type = "higher"))
-
-mito_info_one_dataset
+# mito_info_one_dataset <- mito_info_one_dataset %>%
+#       # Converting to tibble
+#       as_tibble(rownames = "cell") %>%
+# 
+#       # Label cells with high mitochondrial content
+#       mutate(high_mitochondrion = isOutlier(subsets_Mito_percent, type = "higher"))
+# 
+# mito_info_one_dataset
 ```
 
 Finally, we join the mitochondrial information back to the original data so we will be able to filter out the cells with high mitochondrial content.
 
 ```{r}
-mito_info_one_dataset <- one_dataset %>%  left_join(mito_info_one_dataset, by = "cell")
-
-mito_info_one_dataset
+# mito_info_one_dataset <- one_dataset %>%  left_join(mito_info_one_dataset, by = "cell")
+# 
+# mito_info_one_dataset
 ```
 
 The steps above perform the mitochondrial QC analysis for one dataset. To analyse all 10 datasets, we could repeat the steps for each dataset (a lot of steps!) or create a function and apply it to each dataset. However, a more efficient way is to use nesting. We can nest our data by dataset.
@@ -945,61 +945,61 @@ knitr::include_graphics("../inst/vignettes/nesting.png")
 As a simple example of nesting. Imagine we had two groups, a and b that contained some values.
 ```{r}
 
-my_tibble = 
-  tibble(
-  label = c("a","a","a","a","a","b","b","b","b","b" ),
-  value = 1:10
-)
-
-my_tibble
+# my_tibble = 
+#   tibble(
+#   label = c("a","a","a","a","a","b","b","b","b","b" ),
+#   value = 1:10
+# )
+# 
+# my_tibble
 ```
 
 We could nest this data to make tables containing the values for each of our a and b groups. With `nest`, `data=` specifies the columns that will be in the tables and creates a list of these smaller tables.
 
 ```{r}
 # Nest
-my_tibble_nested = 
-  my_tibble %>%
-  nest(data = value)
-
-my_tibble_nested
+# my_tibble_nested = 
+#   my_tibble %>%
+#   nest(data = value)
+# 
+# my_tibble_nested
 ```
 
 We can then iterate over these smaller tables. `map` is often used in combination with `nest` to perform commands on nested data. There are a few map commands that you can choose from depending on what you want to return. For example, `map_dbl` will return a double (floating point number) and we can use it to calculate the average value for each group. You can use `?map` to see the options. The map syntax is `map(.x, .f)` where `.x` is the table to be iterated over and `.f` is the function. So in this example, `.x` is `data` and `.f` is `~ mean(.x$value)`. We get the mean of the value column for each of the nested tables in data.
 
 ```{r}
 # Summarise
-my_tibble_nested %>%
-  mutate(average = map_dbl(data, ~ mean(.x$value)))
+# my_tibble_nested %>%
+#   mutate(average = map_dbl(data, ~ mean(.x$value)))
 ```
 
 We can apply multiple commands to the nested data using the `%>%`. We can use `unnest` if we want to get back our large (unnested) table to view the results.
  
 ```{r}  
 # Summarise + filter
-my_tibble_nested %>%
-  mutate(average = map_dbl(data, ~ mean(.x$value))) %>%
-  filter(average == max(average)) %>%
-  unnest(data)
+# my_tibble_nested %>%
+#   mutate(average = map_dbl(data, ~ mean(.x$value))) %>%
+#   filter(average == max(average)) %>%
+#   unnest(data)
 ```
 
 We can use `map2` when we have two arguments that we are iterating over. In the example below we have the nested tables (data) and the average for each (average). The map2 syntax is `map2(.x, .y, .f)`.
 
 ```{r}
 # Summarise + update
-my_tibble_nested %>%
-  mutate(average = map_dbl(data, ~ mean(.x$value))) %>%
-  mutate(data = map2(data, average, ~ .x - .y )) %>%
-  unnest(data)
+# my_tibble_nested %>%
+#   mutate(average = map_dbl(data, ~ mean(.x$value))) %>%
+#   mutate(data = map2(data, average, ~ .x - .y )) %>%
+#   unnest(data)
 ```
 
 We will created nested tables for our 10 datasets.
 
 ```{r}
-pbmc_nested <- pbmc %>% 
-    nest(data = -sample)
-
-pbmc_nested
+# pbmc_nested <- pbmc %>% 
+#     nest(data = -sample)
+# 
+# pbmc_nested
 ```
 
 ```{challenge_4 class.source="challenge"}
@@ -1028,32 +1028,32 @@ We will create a table (tibble) with the mitochondrial QC information for each d
 
 ```{r}
 # <INSERT THE CODE HERE FROM THE SOLUTIONS>
-mito_info_all_datasets = rpharma2021tidytranscriptomics::mito_info_all_datasets 
+# mito_info_all_datasets = rpharma2021tidytranscriptomics::mito_info_all_datasets 
 ```
 
 As before, we join the mitochondrial information to the original data.
 
 ```{r}
-  # Join the mitochondrial information to the original SingleCellExperiment data
- mito_info_all_datasets <- mito_info_all_datasets %>%
-    mutate(data = map2(
-    data, mitochondrion_info,
-    ~ left_join(.x, .y, by = "cell")
-  )) %>%
-
-  # Remove the separate mitochondrial information table
-  select(-mitochondrion_info)
-
-mito_info_all_datasets
+#   # Join the mitochondrial information to the original SingleCellExperiment data
+#  mito_info_all_datasets <- mito_info_all_datasets %>%
+#     mutate(data = map2(
+#     data, mitochondrion_info,
+#     ~ left_join(.x, .y, by = "cell")
+#   )) %>%
+# 
+#   # Remove the separate mitochondrial information table
+#   select(-mitochondrion_info)
+# 
+# mito_info_all_datasets
 ```
 
 Remove the nesting to get back one table containing all datasets.
 
 ```{r}
-pbmc <- mito_info_all_datasets %>%
-  unnest(data)
-
-pbmc
+# pbmc <- mito_info_all_datasets %>%
+#   unnest(data)
+# 
+# pbmc
 ```
 
 Nesting has allowed us to perform the QC on each dataset in an efficient way.
@@ -1061,26 +1061,26 @@ Nesting has allowed us to perform the QC on each dataset in an efficient way.
 We can use tidyverse to reshape the data and create [beeswarm plots](http://www.cbs.dtu.dk/~eklund/beeswarm/) to visualise the mitochondrial content.
 
 ```{r, warning=FALSE}
-pbmc %>%
-
-  # Reshaping
-  pivot_longer(c(detected, sum, subsets_Mito_percent)) %>%
-  ggplot(aes(
-    x = sample, y = value,
-    color = high_mitochondrion,
-    alpha = high_mitochondrion,
-    size = high_mitochondrion
-  )) +
-
-  # Plotting
-  geom_quasirandom() +
-  facet_wrap(~name, scale = "free_y") +
-
-  # Customisation
-  scale_color_manual(values = c("black", "#e11f28")) +
-  scale_size_discrete(range = c(0, 2)) +
-  theme_bw() +
-  theme(axis.text.x = element_text(angle = 50, hjust = 1, vjust = 1))
+# pbmc %>%
+# 
+#   # Reshaping
+#   pivot_longer(c(detected, sum, subsets_Mito_percent)) %>%
+#   ggplot(aes(
+#     x = sample, y = value,
+#     color = high_mitochondrion,
+#     alpha = high_mitochondrion,
+#     size = high_mitochondrion
+#   )) +
+# 
+#   # Plotting
+#   geom_quasirandom() +
+#   facet_wrap(~name, scale = "free_y") +
+# 
+#   # Customisation
+#   scale_color_manual(values = c("black", "#e11f28")) +
+#   scale_size_discrete(range = c(0, 2)) +
+#   theme_bw() +
+#   theme(axis.text.x = element_text(angle = 50, hjust = 1, vjust = 1))
 ```
 
 In the faceted plot, "detected" is the number of genes in each of the 10 datasets, "sum" is the total counts.
@@ -1088,7 +1088,7 @@ In the faceted plot, "detected" is the number of genes in each of the 10 dataset
 We then proceed to filter out cells with high mitochondrial content.
 
 ```{r}
-pbmc <- pbmc %>% filter(!high_mitochondrion)
+# pbmc <- pbmc %>% filter(!high_mitochondrion)
 ```
 
 ## Scaling and Integrating
@@ -1097,21 +1097,21 @@ As we are working with multiple datasets, we need to integrate them and adjust f
 
 ```{r preprocess SingleCellExperiment, message=FALSE, warning=FALSE}
 # Scaling within each dataset
-pbmc <-
-  pbmc %>%
-
-  # Define batch
-  nest(data = -dataset) %>%
-
-  # Normalisation   
-  mutate(data = multiBatchNorm(data)) %>%
-
-  # Integration
-  pull(data) %>%
-  fastMNN() %>%
-  
-  # Join old information
-  left_join(pbmc %>% as_tibble())
+# pbmc <-
+#   pbmc %>%
+# 
+#   # Define batch
+#   nest(data = -dataset) %>%
+# 
+#   # Normalisation   
+#   mutate(data = multiBatchNorm(data)) %>%
+# 
+#   # Integration
+#   pull(data) %>%
+#   fastMNN() %>%
+#   
+#   # Join old information
+#   left_join(pbmc %>% as_tibble())
 ```
 
 ## Identify clusters
@@ -1121,21 +1121,21 @@ We proceed with identifying cell clusters.
 ```{r cluster}
 # Assign clusters to the 'colLabels'
 # of the SingleCellExperiment object
-colLabels(pbmc) <- # from SingleCellExperiment
-  pbmc %>%
-  buildSNNGraph(use.dimred="corrected") %>% # from scran - shared nearest neighbour
-  cluster_walktrap() %$% # from igraph
-  membership %>%
-  as.factor()
-
-# Reorder columns
-pbmc %>% select(label, everything())
+# colLabels(pbmc) <- # from SingleCellExperiment
+#   pbmc %>%
+#   buildSNNGraph(use.dimred="corrected") %>% # from scran - shared nearest neighbour
+#   cluster_walktrap() %$% # from igraph
+#   membership %>%
+#   as.factor()
+# 
+# # Reorder columns
+# pbmc %>% select(label, everything())
 ```
 
 Thanks to tidySingleCellExperiment we can interrogate the object with tidyverse commands and use `count` to count the number of cells in each cluster.
 
 ```{r cluster count SingleCellExperiment}
-pbmc %>% count(label)
+# pbmc %>% count(label)
 ```
 
 ## Reduce dimensions
@@ -1144,8 +1144,8 @@ Besides PCA which is a linear dimensionality reduction, we can apply neighbour a
 
 ```{r umap SingleCellExperiment 2, warning=FALSE}
 # Calculate UMAP with scater
-pbmc %>%
-runUMAP(ncomponents = 2, dimred="corrected") # from scater
+# pbmc %>%
+# runUMAP(ncomponents = 2, dimred="corrected") # from scater
 ```
 
 ```{challenge_5 class.source="challenge"}
@@ -1162,23 +1162,23 @@ We can calculate the first 3 UMAP dimensions using the scater framework.
 
 ```{r umap SingleCellExperiment 3, warning=FALSE}
 # Calculate UMAP with scater
-pbmc <-
-  pbmc %>%
-  runUMAP(ncomponents = 3, dimred="corrected") # from scater
+# pbmc <-
+#   pbmc %>%
+#   runUMAP(ncomponents = 3, dimred="corrected") # from scater
 ```
 
 And we can plot the clusters as a 3D plot using plotly. This time we are colouring by estimated cluster labels to visually check the cluster labels.
 
 ```{r umap plot 2, eval=FALSE}
-pbmc %>%
-  plot_ly(
-    x = ~`UMAP1`,
-    y = ~`UMAP2`,
-    z = ~`UMAP3`,
-    colors = friendly_cols[1:10],
-    color = ~label,
-    size=0.5 
-  )
+# pbmc %>%
+#   plot_ly(
+#     x = ~`UMAP1`,
+#     y = ~`UMAP2`,
+#     z = ~`UMAP3`,
+#     colors = friendly_cols[1:10],
+#     color = ~label,
+#     size=0.5 
+#   )
 ```
 
 ```{r, echo=FALSE}
@@ -1193,21 +1193,21 @@ We can identify cluster markers (genes). As example, we are selecting the top 10
 
 ```{r}
 # Identify top 10 markers per cluster
-marker_genes <-
-    pbmc %>%
-    findMarkers(groups=pbmc$label, assay.type = "reconstructed") %>%  # scran
-    as.list() %>%
-    map(~ head(.x, 10) %>%  rownames()) %>%
-    unlist()
-
-# Plot heatmap
-pbmc %>%
-  plotHeatmap(                                  # from scater
-    features=marker_genes, 
-    columns=order(pbmc$label), 
-    colour_columns_by=c("label"), 
-    exprs_values  = "reconstructed"
-  ) 
+# marker_genes <-
+#     pbmc %>%
+#     findMarkers(groups=pbmc$label, assay.type = "reconstructed") %>%  # scran
+#     as.list() %>%
+#     map(~ head(.x, 10) %>%  rownames()) %>%
+#     unlist()
+# 
+# # Plot heatmap
+# pbmc %>%
+#   plotHeatmap(                                  # from scater
+#     features=marker_genes, 
+#     columns=order(pbmc$label), 
+#     colour_columns_by=c("label"), 
+#     exprs_values  = "reconstructed"
+#   ) 
 ```
 
 ### Automatic cell type classification
@@ -1216,38 +1216,38 @@ We can infer cell type identities (e.g. T cell) using *SingleR* [@aran2019refere
 
 ```{r}
 # Reference cell types
-blueprint <- BlueprintEncodeData()
-
-cell_type <-
-
-  # extracting counts from SingleCellExperiment object
-  assays(pbmc)$reconstructed %>%
-
-    # SingleR
-  SingleR(
-    ref = blueprint,
-    labels = blueprint$label.main,
-    clusters = pbmc %>% pull(label)
-  ) %>%
-
-  # Formatting results
-  as.data.frame() %>%
-  as_tibble(rownames = "label") %>%
-  select(label, first.labels)
-
-cell_type
+# blueprint <- BlueprintEncodeData()
+# 
+# cell_type <-
+# 
+#   # extracting counts from SingleCellExperiment object
+#   assays(pbmc)$reconstructed %>%
+# 
+#     # SingleR
+#   SingleR(
+#     ref = blueprint,
+#     labels = blueprint$label.main,
+#     clusters = pbmc %>% pull(label)
+#   ) %>%
+# 
+#   # Formatting results
+#   as.data.frame() %>%
+#   as_tibble(rownames = "label") %>%
+#   select(label, first.labels)
+# 
+# cell_type
 ```
 
 We join the cell type information to our pbmc data.
 
 ```{r}
 # Join cell type info
-pbmc <-
-  pbmc %>%
-  left_join(cell_type, by = "label")
-
-# Reorder columns
-pbmc %>% select(cell, first.labels, everything())
+# pbmc <-
+#   pbmc %>%
+#   left_join(cell_type, by = "label")
+# 
+# # Reorder columns
+# pbmc %>% select(cell, first.labels, everything())
 ```
 
 #### Challenge: use tidyverse grammar to identify the most abundant cell type
@@ -1266,21 +1266,21 @@ To do this, we will load a helper function called `aggregate_cells` from [GitHub
 
 ```{r warning=FALSE, message=FALSE}
 # Load aggregate function
-devtools::source_gist("889e4089a0e5ca2649d3c9164e3b542e")
-
-# Aggregate
-pbmc_bulk =
-  rpharma2021tidytranscriptomics::pbmc %>%
-  aggregate_cells(file)
-pbmc_bulk
+# devtools::source_gist("889e4089a0e5ca2649d3c9164e3b542e")
+# 
+# # Aggregate
+# pbmc_bulk =
+#   rpharma2021tidytranscriptomics::pbmc %>%
+#   aggregate_cells(file)
+# pbmc_bulk
 ```
 
 ```{r}
-pbmc_bulk %>%
-
-  # Tidybulk operations
-  tidybulk::identify_abundant() %>%
-  tidybulk::scale_abundance()
+# pbmc_bulk %>%
+# 
+#   # Tidybulk operations
+#   tidybulk::identify_abundant() %>%
+#   tidybulk::scale_abundance()
 ```
 
 ## Introduction to tidyseurat
