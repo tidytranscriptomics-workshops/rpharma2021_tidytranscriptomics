@@ -48,17 +48,20 @@ This can be achieved with the integration of packages present in the R CRAN and 
 
 ### Pre-requisites
 
-* Basic knowledge of RStudio
-* Some familiarity with tidyverse syntax
+* Familiarity with tidyverse syntax
 * Some familiarity with bulk RNA-seq and single cell RNA-seq
 
-Recommended Background Reading
-[Introduction to R for Biologists](https://melbournebioinformatics.github.io/r-intro-biologists/intro_r_biologists.html)
+Strongly recommended background reading:
+
+https://melbournebioinformatics.github.io/r-intro-biologists/intro_r_biologists.html
+https://towardsdatascience.com/coding-in-r-nest-and-map-your-way-to-efficient-code-4e44ba58ee4a by Rebecca O’Dwyer
+https://finnstats.com/index.php/2021/04/02/tidyverse-in-r/
+
 
 
 ### Time outline
 
-The workshop format is a 4 hour session consisting of hands-on demos, exercises and Q&A.
+The workshop format is a 3 hour session consisting of hands-on demos, exercises and Q&A.
 
 Guide
 
@@ -68,13 +71,11 @@ Guide
 |  *Hands-on Demos + Exercises*                           |  90m |
 |      Differential gene expression                       |      |
 |      Cell type composition analysis                     |      |
-| _Break_                                                 |  30m |
 | **Part 2 Single-cell RNA-seq**                          |      |
 |  *Hands-on Demos + Exercises*                           |  90m |
 |      Single-cell analysis                               |      |
 |      Pseudobulk analysis                                |      |
-| _Q&A_                                                   |  30m |
-| Total                                                   | 240m |
+| Total                                                   | 180m |
 
 <br>
 **Format**: Hands on demos, exercises plus Q&A 
@@ -182,15 +183,14 @@ knitr::include_graphics("../inst/vignettes/tidyverse.png")
 
 ### Cloud
 
-Easiest way to run this material. Only available during workshop. Many thanks to the Australian Research Data Commons (ARDC) for providing RStudio in the Australian Nectar Research Cloud and Andy Botting from ARDC for helping to set up.
+Easiest way to run this material. Only available during workshop. 
 
- * Login to one of the servers (e.g. https://rstudio1.tidytranscriptomics-workshop.cloud.edu.au/rstudio/) with one of the usernames and passwords from the spreadsheet provided at the workshop. Add your name into the spreadsheet beside the login you're using.
- * Open `tidytranscriptomics.Rmd` in `rpharma2021_tidytranscriptomcs/vignettes` folder
+
  
 
 ### Local
 
-We will use the Cloud during the RPharma workshop and this method is available if you want to run the material after the workshop. If you want to install on your own computer, see instructions [here](https://tidytranscriptomics-workshops.github.io/rpharma2021_tidytranscriptomics/index.html#workshop-package-installation). 
+We will use RStudio Cloud during the RPharma workshop. After the workshop, if you want to install on your own computer, see instructions [here](https://tidytranscriptomics-workshops.github.io/rpharma2021_tidytranscriptomics/index.html#workshop-package-installation). 
 
 Alternatively, you can view the material at the workshop webpage [here](https://tidytranscriptomics-workshops.github.io/rpharma2021_tidytranscriptomics/articles/tidytranscriptomics.html). 
 
@@ -1344,7 +1344,7 @@ pbmc_seurat %>% bind_rows(pbmc_seurat)
 
 # Feedback
 
-We and the RPharma Tutorial organisers would be very grateful if you could please complete the RPharma 2021 Tutorial Feedback survey so we can gather feedback on the effectiveness and usefulness of this RPharma Tutorial. The link to the survey is here: https://forms.gle/y5s1Lm5yjn5pGxHJ8. 
+We would be very grateful if you could please complete the feedback survey so we can gather feedback on the effectiveness and usefulness of this tutorial. The link to the survey is here:  
 
 # Contributing
 
