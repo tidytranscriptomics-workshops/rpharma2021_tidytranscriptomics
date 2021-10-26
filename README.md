@@ -5,7 +5,7 @@
 
 # Introduction to Tidy Transcriptomics
 <p float="left">
-<img height="100" alt="rpharma2021" src="man/figures/RPharma2021-virtual.png"/>
+<img height="100" alt="rpharma2021" src="man/figures/rpharma_logo.png"/>
 <img height="100" alt="tidybulk" src="https://github.com/Bioconductor/BiocStickers/blob/master/tidybulk/tidybulk.png?raw=true"/>
 </p>
 
