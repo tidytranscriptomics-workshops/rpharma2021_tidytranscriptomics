@@ -44,7 +44,7 @@ Dr. Maria Doyle is the Application and Training Specialist for Research Computin
 
 This tutorial will present how to perform analysis of single-cell and bulk RNA sequencing data following the tidy data paradigm. The tidy data paradigm provides a standard way to organise data values within a dataset, where each variable is a column, each observation is a row, and data is manipulated using an easy-to-understand vocabulary. Most importantly, the data structure remains consistent across manipulation and analysis functions.
 
-This can be achieved with the integration of packages present in the R CRAN and Bioconductor ecosystem, including [tidyseurat](https://stemangiola.github.io/tidyseurat/), [tidySingleCellExperiment](https://stemangiola.github.io/tidySingleCellExperiment/), [tidybulk](https://stemangiola.github.io/tidybulk/), [tidyHeatmap](https://stemangiola.github.io/tidyHeatmap/) and [tidyverse](https://www.tidyverse.org/). These packages are part of the tidytranscriptomics suite that introduces a tidy approach to RNA sequencing data representation and analysis.
+This can be achieved with the integration of packages present in the R CRAN and Bioconductor ecosystem, including [tidyseurat](https://stemangiola.github.io/tidyseurat/), [tidySingleCellExperiment](https://stemangiola.github.io/tidySingleCellExperiment/), [tidybulk](https://stemangiola.github.io/tidybulk/), [tidyHeatmap](https://stemangiola.github.io/tidyHeatmap/) and [tidyverse](https://www.tidyverse.org/). These packages are part of the tidytranscriptomics suite that introduces a tidy approach to RNA sequencing data representation and analysis. For more information see the [tidy transcriptomics blog](https://stemangiola.github.io/tidytranscriptomics/).
 
 ### Pre-requisites
 
@@ -53,8 +53,8 @@ This can be achieved with the integration of packages present in the R CRAN and 
 
 Strongly recommended background reading:
 
-https://melbournebioinformatics.github.io/r-intro-biologists/intro_r_biologists.html
-https://towardsdatascience.com/coding-in-r-nest-and-map-your-way-to-efficient-code-4e44ba58ee4a by Rebecca O’Dwyer
+https://melbournebioinformatics.github.io/r-intro-biologists/intro_r_biologists.html  
+https://towardsdatascience.com/coding-in-r-nest-and-map-your-way-to-efficient-code-4e44ba58ee4a by Rebecca O’Dwyer  
 https://finnstats.com/index.php/2021/04/02/tidyverse-in-r/
 
 
@@ -79,7 +79,7 @@ Guide
 
 <br>
 **Format**: Hands on demos, exercises plus Q&A 
-**Interact**: Zoom chat
+**Interact**: Zoom chat, Menti quiz for challenges
 <br>
 <br>
 
@@ -100,6 +100,27 @@ The tidytranscriptomics approach to RNA sequencing data analysis abstracts out t
 * Recall the key concepts of RNA sequencing data analysis
 * Apply the concepts to publicly available data
 * Create plots that summarise the information content of the data and analysis results
+
+### Google doc with all links
+
+[This Google doc](https://docs.google.com/document/d/1XWg7ATaf2Pj53nHvZzoNbIT-QnyllaIhd-x1pB0ZIr8/edit?usp=sharing) has all the links you need for this workshop. 
+
+* Material
+* Menti for Audience Questions and Challenges Quiz
+* RStudio cloud logins
+* Feedback survey
+
+### Audience Questions
+
+First we have a few questions for you, the audience.
+
+Please either open a tab in your browser or use your phone. Go to Menti (www.menti.com) and type the code given in the Google doc above.
+
+Then please rate the following on a scale of 1-5 (1=no/none, 5=yes/a lot)
+
+* I will code along and/or try out exercises during this workshop.  
+* I have experience with transcriptomic analyses  
+* I have experience with tidyverse  
 
 
 ## What is transcriptomics?
@@ -184,9 +205,11 @@ knitr::include_graphics("../inst/vignettes/tidyverse.png")
 ### Cloud
 
 Easiest way to run this material. Only available during workshop. 
+The organisers will share the access link to the RStudio Cloud project at the start of the workshop. You then click the button to make a copy of the project, as in screenshot below.
 
-
- 
+```{r, echo=FALSE, fig.cap="RStudio Cloud project"}
+knitr::include_graphics("../inst/vignettes/rstudio_cloud.png")
+```
 
 ### Local
 
@@ -478,6 +501,7 @@ counts_scal_PCA <-
 
 ```{challenge_1 class.source="challenge"}
 Challenge: What fraction of variance is explained by PC3?
+Select one of the multiple choice options in www.menti.com (code in Google doc).
 ```
 
 This joins the result to the counts' object.
@@ -613,6 +637,7 @@ de_all %>%
 
 ```{challenge_2 class.source="challenge"}
 Challenge: Which method detects the most differentially abundant transcripts, p value adjusted for multiple testing <  0.05 (FDR, adj.P.Val, padj)?
+Select one of the multiple choice options in www.menti.com (code in Google doc).
 ```
 
 ### Single method
@@ -750,6 +775,7 @@ BRCA_cell_type_long %>%
 
 ```{challenge_3 class.source="challenge"}
 Challenge: What is the most abundant cell type overall in BRCA samples?
+Select one of the multiple choice options in www.menti.com (code in Google doc).
 ```
 
 ## Key Points
@@ -1004,6 +1030,7 @@ We will created nested tables for our 10 datasets.
 
 ```{challenge_4 class.source="challenge"}
 Challenge: Using the nest examples above, can you create a column that includes the mitochondrial information?
+This one is not a Menti quiz question.    
 ```
 
 We want to obtain this table
@@ -1150,6 +1177,7 @@ Besides PCA which is a linear dimensionality reduction, we can apply neighbour a
 
 ```{challenge_5 class.source="challenge"}
 Without creating any variable, check if the variability explained by the first UMAP dimension when calculating 2 components (ncomponents = 2) is equal/more/less than when calculating 3 components.
+Select one of the multiple choice options in www.menti.com (code in Google doc).
 ```
 
 **Tip: your can use as_tibble() to convert the tibble abstraction to a simple (and light) cell-wise tibble**
@@ -1344,7 +1372,7 @@ pbmc_seurat %>% bind_rows(pbmc_seurat)
 
 # Feedback
 
-We would be very grateful if you could please complete the feedback survey so we can gather feedback on the effectiveness and usefulness of this tutorial. The link to the survey is here:  
+We would be very grateful if you could please complete the feedback survey so we can gather feedback on the effectiveness and usefulness of this tutorial. The link to the survey is here: https://forms.gle/QVGUqQAjC8Zgg5EaA 
 
 # Contributing
 
