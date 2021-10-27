@@ -32,6 +32,9 @@ If you want to install the packages and material post-workshop, the instructions
 # Need to set this to prevent installation erroring due to even tiny warnings, similar to here: https://github.com/r-lib/remotes/issues/403#issuecomment-748181946
 Sys.setenv("R_REMOTES_NO_ERRORS_FROM_WARNINGS" = "true")
 
+# Install same versions used in the workshop
+remotes::install_github("stemangiola/tidySummarizedExperiment@v1.5.1")
+
 # Install workshop package
 remotes::install_github("tidytranscriptomics-workshops/rpharma2021_tidytranscriptomics", build_vignettes = TRUE)
 
