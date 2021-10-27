@@ -1,7 +1,7 @@
 on: [push]
 
 env:
-  cache-version: v1
+  cache-version: v2
   repo-name: tidytranscriptomics-workshops/rpharma2021_tidytranscriptomics
   GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }} 
 
@@ -16,6 +16,9 @@ jobs:
         run: |
           ## To fix preprocessCore error https://github.com/stemangiola/tidybulk/issues/145
           BiocManager::install("preprocessCore", configure.args="--disable-threading")
+          
+          # We'll install the specific versions from the install instructions
+          BiocManager::install("stemangiola/tidySummarizedExperiment@v1.5.1")
 
           # Then install the other dependencies in the usual way
           BiocManager::install(ask=FALSE)
