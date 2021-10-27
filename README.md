@@ -55,8 +55,8 @@ This can be achieved with the integration of packages present in the R CRAN and 
 
 Strongly recommended background reading:
 
-https://melbournebioinformatics.github.io/r-intro-biologists/intro_r_biologists.html
-https://towardsdatascience.com/coding-in-r-nest-and-map-your-way-to-efficient-code-4e44ba58ee4a by Rebecca O’Dwyer
+https://melbournebioinformatics.github.io/r-intro-biologists/intro_r_biologists.html  
+https://towardsdatascience.com/coding-in-r-nest-and-map-your-way-to-efficient-code-4e44ba58ee4a by Rebecca O’Dwyer  
 https://finnstats.com/index.php/2021/04/02/tidyverse-in-r/
 
 ### Workshop Participation
