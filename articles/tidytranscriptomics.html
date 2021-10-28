@@ -320,8 +320,8 @@ RStudio Cloud project
 <div id="what-is-tidytranscriptomics" class="section level2">
 <h2 class="hasAnchor">
 <a href="#what-is-tidytranscriptomics" class="anchor"></a>What is tidytranscriptomics?</h2>
-<p><a href="https://stemangiola.github.io/tidybulk/">tidybulk</a>, <a href="https://stemangiola.github.io/tidySummarizedExperiment/">tidySummarizedExperiment</a> and <a href="https://stemangiola.github.io/tidySingleCellExperiment/">tidySingleCellExperiment</a> are part of the tidytranscriptomics suite that introduces a tidy approach to RNA sequencing data representation and analysis. The roadmap for the development of the tidytranscriptomics packages is shown in the figure below.</p>
-<p><img src="../inst/vignettes/roadmap.png" width="600px"></p>
+<p><a href="https://stemangiola.github.io/tidybulk/">tidybulk</a>, <a href="https://stemangiola.github.io/tidySummarizedExperiment/">tidySummarizedExperiment</a> and <a href="https://stemangiola.github.io/tidySingleCellExperiment/">tidySingleCellExperiment</a> are part of the tidytranscriptomics suite that introduces a tidy approach to RNA sequencing data representation and analysis. A diagram showing how the tidytranscriptomics packages integrate the [tidyverse] (<a href="https://www.tidyverse.org/" class="uri">https://www.tidyverse.org/</a>) with <a href="https://www.bioconductor.org/">Bioconductor</a> and <a href="https://satijalab.org/seurat/">Seurat</a> is shown in the figure below.</p>
+<p><img src="../inst/vignettes/roadmap_integration.png" width="600px"></p>
 </div>
 </div>
 <div id="part-1-bulk-rna-sequencing-with-tidysummarizedexperiment-and-tidybulk" class="section level1">
@@ -459,16 +459,10 @@ RStudio Cloud project
 <span class="co">#&gt; #   BioSample &lt;fct&gt;, GRangesList &lt;list&gt;</span></code></pre></div>
 <p>We can use <code>select</code> to choose columns, for example, to see the sample, cell line and treatment columns.</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">airway</span> <span class="op">%&gt;%</span> <span class="fu"><a href="https://rdrr.io/pkg/tidySummarizedExperiment/man/dplyr-methods.html">select</a></span><span class="op">(</span><span class="va">sample</span>, <span class="va">cell</span>, <span class="va">dex</span><span class="op">)</span>
-<span class="co">#&gt; Warning in is_sample_feature_deprecated_used(.data, (enquos(..., .ignore_empty</span>
-<span class="co">#&gt; = "all") %&gt;% : tidySummarizedExperiment says: from version 1.3.1, the special</span>
-<span class="co">#&gt; columns including sample/feature id (colnames(se), rownames(se)) has changed to</span>
-<span class="co">#&gt; ".sample" and ".feature". This dataset is returned with the old-style vocabulary</span>
-<span class="co">#&gt; (feature and sample), however we suggest to update your workflow to reflect the</span>
-<span class="co">#&gt; new vocabulary (.feature, .sample)</span>
+<code class="sourceCode R"><span class="va">airway</span> <span class="op">%&gt;%</span> <span class="fu"><a href="https://rdrr.io/pkg/tidySummarizedExperiment/man/dplyr-methods.html">select</a></span><span class="op">(</span><span class="va">.sample</span>, <span class="va">cell</span>, <span class="va">dex</span><span class="op">)</span>
 <span class="co">#&gt; tidySummarizedExperiment says: Key columns are missing. A data frame is returned for independent data analysis.</span>
 <span class="co">#&gt; # A tibble: 512,816 × 3</span>
-<span class="co">#&gt;    sample     cell   dex  </span>
+<span class="co">#&gt;    .sample    cell   dex  </span>
 <span class="co">#&gt;    &lt;chr&gt;      &lt;fct&gt;  &lt;fct&gt;</span>
 <span class="co">#&gt;  1 SRR1039508 N61311 untrt</span>
 <span class="co">#&gt;  2 SRR1039508 N61311 untrt</span>
@@ -484,17 +478,11 @@ RStudio Cloud project
 <p>We can combine <code>group_by</code> and <code>summarise</code> to calculate the total counts for each sample.</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">airway</span> <span class="op">%&gt;%</span>
-    <span class="fu"><a href="https://rdrr.io/pkg/tidySummarizedExperiment/man/dplyr-methods.html">group_by</a></span><span class="op">(</span><span class="va">sample</span><span class="op">)</span> <span class="op">%&gt;%</span>
+    <span class="fu"><a href="https://rdrr.io/pkg/tidySummarizedExperiment/man/dplyr-methods.html">group_by</a></span><span class="op">(</span><span class="va">.sample</span><span class="op">)</span> <span class="op">%&gt;%</span>
     <span class="fu"><a href="https://rdrr.io/pkg/tidySummarizedExperiment/man/dplyr-methods.html">summarise</a></span><span class="op">(</span>total_counts<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/sum.html">sum</a></span><span class="op">(</span><span class="va">counts</span><span class="op">)</span><span class="op">)</span>
 <span class="co">#&gt; tidySummarizedExperiment says: A data frame is returned for independent data analysis.</span>
-<span class="co">#&gt; Warning in is_sample_feature_deprecated_used(.data, (enquos(..., .ignore_empty</span>
-<span class="co">#&gt; = "all") %&gt;% : tidySummarizedExperiment says: from version 1.3.1, the special</span>
-<span class="co">#&gt; columns including sample/feature id (colnames(se), rownames(se)) has changed to</span>
-<span class="co">#&gt; ".sample" and ".feature". This dataset is returned with the old-style vocabulary</span>
-<span class="co">#&gt; (feature and sample), however we suggest to update your workflow to reflect the</span>
-<span class="co">#&gt; new vocabulary (.feature, .sample)</span>
 <span class="co">#&gt; # A tibble: 8 × 2</span>
-<span class="co">#&gt;   sample     total_counts</span>
+<span class="co">#&gt;   .sample    total_counts</span>
 <span class="co">#&gt;   &lt;chr&gt;             &lt;int&gt;</span>
 <span class="co">#&gt; 1 SRR1039508     20637971</span>
 <span class="co">#&gt; 2 SRR1039509     18809481</span>
@@ -507,25 +495,12 @@ RStudio Cloud project
 <p>We can use <code>mutate</code> to create a column. For example, we could create a new sample_name column that contains shorter sample names. We can remove the SRR1039 prefix that’s present in all of the samples, as shorter names can fit better in some of the plots we will create. We can use <code>mutate</code> together with <code>str_replace</code> to remove the SRR1039 string from the sample column.</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">airway</span> <span class="op">%&gt;%</span>
-  <span class="fu"><a href="https://rdrr.io/pkg/tidySummarizedExperiment/man/dplyr-methods.html">mutate</a></span><span class="op">(</span>sample_name<span class="op">=</span><span class="fu"><a href="https://stringr.tidyverse.org/reference/str_remove.html">str_remove</a></span><span class="op">(</span><span class="va">sample</span>, <span class="st">"SRR1039"</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span>
+  <span class="fu"><a href="https://rdrr.io/pkg/tidySummarizedExperiment/man/dplyr-methods.html">mutate</a></span><span class="op">(</span>sample_name<span class="op">=</span><span class="fu"><a href="https://stringr.tidyverse.org/reference/str_remove.html">str_remove</a></span><span class="op">(</span><span class="va">.sample</span>, <span class="st">"SRR1039"</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span>
   <span class="co"># select columns to view    </span>
-  <span class="fu"><a href="https://rdrr.io/pkg/tidySummarizedExperiment/man/dplyr-methods.html">select</a></span><span class="op">(</span><span class="va">sample</span>, <span class="va">sample_name</span><span class="op">)</span>
-<span class="co">#&gt; Warning in is_sample_feature_deprecated_used(.data, (enquos(..., .ignore_empty</span>
-<span class="co">#&gt; = "all") %&gt;% : tidySummarizedExperiment says: from version 1.3.1, the special</span>
-<span class="co">#&gt; columns including sample/feature id (colnames(se), rownames(se)) has changed to</span>
-<span class="co">#&gt; ".sample" and ".feature". This dataset is returned with the old-style vocabulary</span>
-<span class="co">#&gt; (feature and sample), however we suggest to update your workflow to reflect the</span>
-<span class="co">#&gt; new vocabulary (.feature, .sample)</span>
-
-<span class="co">#&gt; Warning in is_sample_feature_deprecated_used(.data, (enquos(..., .ignore_empty</span>
-<span class="co">#&gt; = "all") %&gt;% : tidySummarizedExperiment says: from version 1.3.1, the special</span>
-<span class="co">#&gt; columns including sample/feature id (colnames(se), rownames(se)) has changed to</span>
-<span class="co">#&gt; ".sample" and ".feature". This dataset is returned with the old-style vocabulary</span>
-<span class="co">#&gt; (feature and sample), however we suggest to update your workflow to reflect the</span>
-<span class="co">#&gt; new vocabulary (.feature, .sample)</span>
+  <span class="fu"><a href="https://rdrr.io/pkg/tidySummarizedExperiment/man/dplyr-methods.html">select</a></span><span class="op">(</span><span class="va">.sample</span>, <span class="va">sample_name</span><span class="op">)</span>
 <span class="co">#&gt; tidySummarizedExperiment says: Key columns are missing. A data frame is returned for independent data analysis.</span>
 <span class="co">#&gt; # A tibble: 512,816 × 2</span>
-<span class="co">#&gt;    sample     sample_name</span>
+<span class="co">#&gt;    .sample    sample_name</span>
 <span class="co">#&gt;    &lt;chr&gt;      &lt;chr&gt;      </span>
 <span class="co">#&gt;  1 SRR1039508 508        </span>
 <span class="co">#&gt;  2 SRR1039508 508        </span>
@@ -654,39 +629,33 @@ RStudio Cloud project
 <code class="sourceCode R"><span class="co"># setup data workflow</span>
 <span class="va">counts</span> <span class="op">&lt;-</span>
   <span class="va">airway</span> <span class="op">%&gt;%</span>
-  <span class="fu"><a href="https://rdrr.io/pkg/tidySummarizedExperiment/man/dplyr-methods.html">mutate</a></span><span class="op">(</span>sample_name <span class="op">=</span> <span class="fu"><a href="https://stringr.tidyverse.org/reference/str_remove.html">str_remove</a></span><span class="op">(</span><span class="va">sample</span>, <span class="st">"SRR1039"</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span>
+  <span class="fu"><a href="https://rdrr.io/pkg/tidySummarizedExperiment/man/dplyr-methods.html">mutate</a></span><span class="op">(</span>sample_name <span class="op">=</span> <span class="fu"><a href="https://stringr.tidyverse.org/reference/str_remove.html">str_remove</a></span><span class="op">(</span><span class="va">.sample</span>, <span class="st">"SRR1039"</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span>
   <span class="fu"><a href="https://rdrr.io/pkg/tidySummarizedExperiment/man/dplyr-methods.html">mutate</a></span><span class="op">(</span>symbol <span class="op">=</span> <span class="fu">AnnotationDbi</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/AnnotationDbi/man/AnnotationDb-class.html">mapIds</a></span><span class="op">(</span><span class="fu">org.Hs.eg.db</span><span class="fu">::</span><span class="va"><a href="https://rdrr.io/pkg/org.Hs.eg.db/man/org.Hs.egBASE.html">org.Hs.eg.db</a></span>,
-    keys <span class="op">=</span> <span class="va">feature</span>,
+    keys <span class="op">=</span> <span class="va">.feature</span>,
     keytype <span class="op">=</span> <span class="st">"ENSEMBL"</span>,
     column <span class="op">=</span> <span class="st">"SYMBOL"</span>,
     multiVals <span class="op">=</span> <span class="st">"first"</span>
   <span class="op">)</span><span class="op">)</span>
-<span class="co">#&gt; Warning in is_sample_feature_deprecated_used(.data, (enquos(..., .ignore_empty</span>
-<span class="co">#&gt; = "all") %&gt;% : tidySummarizedExperiment says: from version 1.3.1, the special</span>
-<span class="co">#&gt; columns including sample/feature id (colnames(se), rownames(se)) has changed to</span>
-<span class="co">#&gt; ".sample" and ".feature". This dataset is returned with the old-style vocabulary</span>
-<span class="co">#&gt; (feature and sample), however we suggest to update your workflow to reflect the</span>
-<span class="co">#&gt; new vocabulary (.feature, .sample)</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; 'select()' returned 1:many mapping between keys and columns</span>
 <span class="co"># take a look</span>
 <span class="va">counts</span>
 <span class="co">#&gt; # A SummarizedExperiment-tibble abstraction: 512,816 × 15</span>
 <span class="co">#&gt; [90m# Transcripts=64102 | Samples=8 | Assays=counts[39m</span>
-<span class="co">#&gt;    feature sample counts SampleName cell  dex   albut Run   avgLength Experiment</span>
-<span class="co">#&gt;    &lt;chr&gt;   &lt;chr&gt;   &lt;int&gt; &lt;fct&gt;      &lt;fct&gt; &lt;fct&gt; &lt;fct&gt; &lt;fct&gt;     &lt;int&gt; &lt;fct&gt;     </span>
-<span class="co">#&gt;  1 ENSG00… SRR10…    679 GSM1275862 N613… untrt untrt SRR1…       126 SRX384345 </span>
-<span class="co">#&gt;  2 ENSG00… SRR10…      0 GSM1275862 N613… untrt untrt SRR1…       126 SRX384345 </span>
-<span class="co">#&gt;  3 ENSG00… SRR10…    467 GSM1275862 N613… untrt untrt SRR1…       126 SRX384345 </span>
-<span class="co">#&gt;  4 ENSG00… SRR10…    260 GSM1275862 N613… untrt untrt SRR1…       126 SRX384345 </span>
-<span class="co">#&gt;  5 ENSG00… SRR10…     60 GSM1275862 N613… untrt untrt SRR1…       126 SRX384345 </span>
-<span class="co">#&gt;  6 ENSG00… SRR10…      0 GSM1275862 N613… untrt untrt SRR1…       126 SRX384345 </span>
-<span class="co">#&gt;  7 ENSG00… SRR10…   3251 GSM1275862 N613… untrt untrt SRR1…       126 SRX384345 </span>
-<span class="co">#&gt;  8 ENSG00… SRR10…   1433 GSM1275862 N613… untrt untrt SRR1…       126 SRX384345 </span>
-<span class="co">#&gt;  9 ENSG00… SRR10…    519 GSM1275862 N613… untrt untrt SRR1…       126 SRX384345 </span>
-<span class="co">#&gt; 10 ENSG00… SRR10…    394 GSM1275862 N613… untrt untrt SRR1…       126 SRX384345 </span>
-<span class="co">#&gt; # … with 40 more rows, and 5 more variables: Sample &lt;fct&gt;, BioSample &lt;fct&gt;,</span>
-<span class="co">#&gt; #   sample_name &lt;chr&gt;, symbol &lt;chr&gt;, GRangesList &lt;list&gt;</span></code></pre></div>
+<span class="co">#&gt;    .feature .sample counts SampleName cell  dex   albut Run   avgLength</span>
+<span class="co">#&gt;    &lt;chr&gt;    &lt;chr&gt;    &lt;int&gt; &lt;fct&gt;      &lt;fct&gt; &lt;fct&gt; &lt;fct&gt; &lt;fct&gt;     &lt;int&gt;</span>
+<span class="co">#&gt;  1 ENSG000… SRR103…    679 GSM1275862 N613… untrt untrt SRR1…       126</span>
+<span class="co">#&gt;  2 ENSG000… SRR103…      0 GSM1275862 N613… untrt untrt SRR1…       126</span>
+<span class="co">#&gt;  3 ENSG000… SRR103…    467 GSM1275862 N613… untrt untrt SRR1…       126</span>
+<span class="co">#&gt;  4 ENSG000… SRR103…    260 GSM1275862 N613… untrt untrt SRR1…       126</span>
+<span class="co">#&gt;  5 ENSG000… SRR103…     60 GSM1275862 N613… untrt untrt SRR1…       126</span>
+<span class="co">#&gt;  6 ENSG000… SRR103…      0 GSM1275862 N613… untrt untrt SRR1…       126</span>
+<span class="co">#&gt;  7 ENSG000… SRR103…   3251 GSM1275862 N613… untrt untrt SRR1…       126</span>
+<span class="co">#&gt;  8 ENSG000… SRR103…   1433 GSM1275862 N613… untrt untrt SRR1…       126</span>
+<span class="co">#&gt;  9 ENSG000… SRR103…    519 GSM1275862 N613… untrt untrt SRR1…       126</span>
+<span class="co">#&gt; 10 ENSG000… SRR103…    394 GSM1275862 N613… untrt untrt SRR1…       126</span>
+<span class="co">#&gt; # … with 40 more rows, and 6 more variables: Experiment &lt;fct&gt;, Sample &lt;fct&gt;,</span>
+<span class="co">#&gt; #   BioSample &lt;fct&gt;, sample_name &lt;chr&gt;, symbol &lt;chr&gt;, GRangesList &lt;list&gt;</span></code></pre></div>
 </div>
 <div id="filtering-lowly-transcribed-genes" class="section level2">
 <h2 class="hasAnchor">
@@ -701,20 +670,21 @@ RStudio Cloud project
 <span class="va">counts_filtered</span>
 <span class="co">#&gt; # A SummarizedExperiment-tibble abstraction: 127,408 × 16</span>
 <span class="co">#&gt; [90m# Transcripts=15926 | Samples=8 | Assays=counts[39m</span>
-<span class="co">#&gt;    feature sample counts SampleName cell  dex   albut Run   avgLength Experiment</span>
-<span class="co">#&gt;    &lt;chr&gt;   &lt;chr&gt;   &lt;int&gt; &lt;fct&gt;      &lt;fct&gt; &lt;fct&gt; &lt;fct&gt; &lt;fct&gt;     &lt;int&gt; &lt;fct&gt;     </span>
-<span class="co">#&gt;  1 ENSG00… SRR10…    679 GSM1275862 N613… untrt untrt SRR1…       126 SRX384345 </span>
-<span class="co">#&gt;  2 ENSG00… SRR10…    467 GSM1275862 N613… untrt untrt SRR1…       126 SRX384345 </span>
-<span class="co">#&gt;  3 ENSG00… SRR10…    260 GSM1275862 N613… untrt untrt SRR1…       126 SRX384345 </span>
-<span class="co">#&gt;  4 ENSG00… SRR10…     60 GSM1275862 N613… untrt untrt SRR1…       126 SRX384345 </span>
-<span class="co">#&gt;  5 ENSG00… SRR10…   3251 GSM1275862 N613… untrt untrt SRR1…       126 SRX384345 </span>
-<span class="co">#&gt;  6 ENSG00… SRR10…   1433 GSM1275862 N613… untrt untrt SRR1…       126 SRX384345 </span>
-<span class="co">#&gt;  7 ENSG00… SRR10…    519 GSM1275862 N613… untrt untrt SRR1…       126 SRX384345 </span>
-<span class="co">#&gt;  8 ENSG00… SRR10…    394 GSM1275862 N613… untrt untrt SRR1…       126 SRX384345 </span>
-<span class="co">#&gt;  9 ENSG00… SRR10…    172 GSM1275862 N613… untrt untrt SRR1…       126 SRX384345 </span>
-<span class="co">#&gt; 10 ENSG00… SRR10…   2112 GSM1275862 N613… untrt untrt SRR1…       126 SRX384345 </span>
-<span class="co">#&gt; # … with 40 more rows, and 6 more variables: Sample &lt;fct&gt;, BioSample &lt;fct&gt;,</span>
-<span class="co">#&gt; #   sample_name &lt;chr&gt;, symbol &lt;chr&gt;, .abundant &lt;lgl&gt;, GRangesList &lt;list&gt;</span></code></pre></div>
+<span class="co">#&gt;    .feature .sample counts SampleName cell  dex   albut Run   avgLength</span>
+<span class="co">#&gt;    &lt;chr&gt;    &lt;chr&gt;    &lt;int&gt; &lt;fct&gt;      &lt;fct&gt; &lt;fct&gt; &lt;fct&gt; &lt;fct&gt;     &lt;int&gt;</span>
+<span class="co">#&gt;  1 ENSG000… SRR103…    679 GSM1275862 N613… untrt untrt SRR1…       126</span>
+<span class="co">#&gt;  2 ENSG000… SRR103…    467 GSM1275862 N613… untrt untrt SRR1…       126</span>
+<span class="co">#&gt;  3 ENSG000… SRR103…    260 GSM1275862 N613… untrt untrt SRR1…       126</span>
+<span class="co">#&gt;  4 ENSG000… SRR103…     60 GSM1275862 N613… untrt untrt SRR1…       126</span>
+<span class="co">#&gt;  5 ENSG000… SRR103…   3251 GSM1275862 N613… untrt untrt SRR1…       126</span>
+<span class="co">#&gt;  6 ENSG000… SRR103…   1433 GSM1275862 N613… untrt untrt SRR1…       126</span>
+<span class="co">#&gt;  7 ENSG000… SRR103…    519 GSM1275862 N613… untrt untrt SRR1…       126</span>
+<span class="co">#&gt;  8 ENSG000… SRR103…    394 GSM1275862 N613… untrt untrt SRR1…       126</span>
+<span class="co">#&gt;  9 ENSG000… SRR103…    172 GSM1275862 N613… untrt untrt SRR1…       126</span>
+<span class="co">#&gt; 10 ENSG000… SRR103…   2112 GSM1275862 N613… untrt untrt SRR1…       126</span>
+<span class="co">#&gt; # … with 40 more rows, and 7 more variables: Experiment &lt;fct&gt;, Sample &lt;fct&gt;,</span>
+<span class="co">#&gt; #   BioSample &lt;fct&gt;, sample_name &lt;chr&gt;, symbol &lt;chr&gt;, .abundant &lt;lgl&gt;,</span>
+<span class="co">#&gt; #   GRangesList &lt;list&gt;</span></code></pre></div>
 <p>After running <code>keep_abundant</code> we have a column called <code>.abundant</code> containing TRUE (<code>identify_abundant</code> would have TRUE/FALSE).</p>
 </div>
 <div id="scaling-counts-to-normalise" class="section level2">
@@ -729,18 +699,18 @@ RStudio Cloud project
 <span class="va">counts_scaled</span>
 <span class="co">#&gt; # A SummarizedExperiment-tibble abstraction: 127,408 × 19</span>
 <span class="co">#&gt; [90m# Transcripts=15926 | Samples=8 | Assays=counts, counts_scaled[39m</span>
-<span class="co">#&gt;    feature sample counts counts_scaled SampleName cell  dex   albut Run  </span>
-<span class="co">#&gt;    &lt;chr&gt;   &lt;chr&gt;   &lt;int&gt;         &lt;dbl&gt; &lt;fct&gt;      &lt;fct&gt; &lt;fct&gt; &lt;fct&gt; &lt;fct&gt;</span>
-<span class="co">#&gt;  1 ENSG00… SRR10…    679         961.  GSM1275862 N613… untrt untrt SRR1…</span>
-<span class="co">#&gt;  2 ENSG00… SRR10…    467         661.  GSM1275862 N613… untrt untrt SRR1…</span>
-<span class="co">#&gt;  3 ENSG00… SRR10…    260         368.  GSM1275862 N613… untrt untrt SRR1…</span>
-<span class="co">#&gt;  4 ENSG00… SRR10…     60          84.9 GSM1275862 N613… untrt untrt SRR1…</span>
-<span class="co">#&gt;  5 ENSG00… SRR10…   3251        4601.  GSM1275862 N613… untrt untrt SRR1…</span>
-<span class="co">#&gt;  6 ENSG00… SRR10…   1433        2028.  GSM1275862 N613… untrt untrt SRR1…</span>
-<span class="co">#&gt;  7 ENSG00… SRR10…    519         734.  GSM1275862 N613… untrt untrt SRR1…</span>
-<span class="co">#&gt;  8 ENSG00… SRR10…    394         558.  GSM1275862 N613… untrt untrt SRR1…</span>
-<span class="co">#&gt;  9 ENSG00… SRR10…    172         243.  GSM1275862 N613… untrt untrt SRR1…</span>
-<span class="co">#&gt; 10 ENSG00… SRR10…   2112        2989.  GSM1275862 N613… untrt untrt SRR1…</span>
+<span class="co">#&gt;    .feature .sample counts counts_scaled SampleName cell  dex   albut Run  </span>
+<span class="co">#&gt;    &lt;chr&gt;    &lt;chr&gt;    &lt;int&gt;         &lt;dbl&gt; &lt;fct&gt;      &lt;fct&gt; &lt;fct&gt; &lt;fct&gt; &lt;fct&gt;</span>
+<span class="co">#&gt;  1 ENSG000… SRR103…    679         961.  GSM1275862 N613… untrt untrt SRR1…</span>
+<span class="co">#&gt;  2 ENSG000… SRR103…    467         661.  GSM1275862 N613… untrt untrt SRR1…</span>
+<span class="co">#&gt;  3 ENSG000… SRR103…    260         368.  GSM1275862 N613… untrt untrt SRR1…</span>
+<span class="co">#&gt;  4 ENSG000… SRR103…     60          84.9 GSM1275862 N613… untrt untrt SRR1…</span>
+<span class="co">#&gt;  5 ENSG000… SRR103…   3251        4601.  GSM1275862 N613… untrt untrt SRR1…</span>
+<span class="co">#&gt;  6 ENSG000… SRR103…   1433        2028.  GSM1275862 N613… untrt untrt SRR1…</span>
+<span class="co">#&gt;  7 ENSG000… SRR103…    519         734.  GSM1275862 N613… untrt untrt SRR1…</span>
+<span class="co">#&gt;  8 ENSG000… SRR103…    394         558.  GSM1275862 N613… untrt untrt SRR1…</span>
+<span class="co">#&gt;  9 ENSG000… SRR103…    172         243.  GSM1275862 N613… untrt untrt SRR1…</span>
+<span class="co">#&gt; 10 ENSG000… SRR103…   2112        2989.  GSM1275862 N613… untrt untrt SRR1…</span>
 <span class="co">#&gt; # … with 40 more rows, and 10 more variables: avgLength &lt;int&gt;,</span>
 <span class="co">#&gt; #   Experiment &lt;fct&gt;, Sample &lt;fct&gt;, BioSample &lt;fct&gt;, sample_name &lt;chr&gt;,</span>
 <span class="co">#&gt; #   TMM &lt;dbl&gt;, multiplier &lt;dbl&gt;, symbol &lt;chr&gt;, .abundant &lt;lgl&gt;,</span>
@@ -840,18 +810,18 @@ Select one of the multiple choice options in www.menti.com (code in Google doc).
 <span class="va">counts_scal_PCA</span>
 <span class="co">#&gt; # A SummarizedExperiment-tibble abstraction: 127,408 × 21</span>
 <span class="co">#&gt; [90m# Transcripts=15926 | Samples=8 | Assays=counts, counts_scaled[39m</span>
-<span class="co">#&gt;    feature sample counts counts_scaled SampleName cell  dex   albut Run  </span>
-<span class="co">#&gt;    &lt;chr&gt;   &lt;chr&gt;   &lt;int&gt;         &lt;dbl&gt; &lt;fct&gt;      &lt;fct&gt; &lt;fct&gt; &lt;fct&gt; &lt;fct&gt;</span>
-<span class="co">#&gt;  1 ENSG00… SRR10…    679         961.  GSM1275862 N613… untrt untrt SRR1…</span>
-<span class="co">#&gt;  2 ENSG00… SRR10…    467         661.  GSM1275862 N613… untrt untrt SRR1…</span>
-<span class="co">#&gt;  3 ENSG00… SRR10…    260         368.  GSM1275862 N613… untrt untrt SRR1…</span>
-<span class="co">#&gt;  4 ENSG00… SRR10…     60          84.9 GSM1275862 N613… untrt untrt SRR1…</span>
-<span class="co">#&gt;  5 ENSG00… SRR10…   3251        4601.  GSM1275862 N613… untrt untrt SRR1…</span>
-<span class="co">#&gt;  6 ENSG00… SRR10…   1433        2028.  GSM1275862 N613… untrt untrt SRR1…</span>
-<span class="co">#&gt;  7 ENSG00… SRR10…    519         734.  GSM1275862 N613… untrt untrt SRR1…</span>
-<span class="co">#&gt;  8 ENSG00… SRR10…    394         558.  GSM1275862 N613… untrt untrt SRR1…</span>
-<span class="co">#&gt;  9 ENSG00… SRR10…    172         243.  GSM1275862 N613… untrt untrt SRR1…</span>
-<span class="co">#&gt; 10 ENSG00… SRR10…   2112        2989.  GSM1275862 N613… untrt untrt SRR1…</span>
+<span class="co">#&gt;    .feature .sample counts counts_scaled SampleName cell  dex   albut Run  </span>
+<span class="co">#&gt;    &lt;chr&gt;    &lt;chr&gt;    &lt;int&gt;         &lt;dbl&gt; &lt;fct&gt;      &lt;fct&gt; &lt;fct&gt; &lt;fct&gt; &lt;fct&gt;</span>
+<span class="co">#&gt;  1 ENSG000… SRR103…    679         961.  GSM1275862 N613… untrt untrt SRR1…</span>
+<span class="co">#&gt;  2 ENSG000… SRR103…    467         661.  GSM1275862 N613… untrt untrt SRR1…</span>
+<span class="co">#&gt;  3 ENSG000… SRR103…    260         368.  GSM1275862 N613… untrt untrt SRR1…</span>
+<span class="co">#&gt;  4 ENSG000… SRR103…     60          84.9 GSM1275862 N613… untrt untrt SRR1…</span>
+<span class="co">#&gt;  5 ENSG000… SRR103…   3251        4601.  GSM1275862 N613… untrt untrt SRR1…</span>
+<span class="co">#&gt;  6 ENSG000… SRR103…   1433        2028.  GSM1275862 N613… untrt untrt SRR1…</span>
+<span class="co">#&gt;  7 ENSG000… SRR103…    519         734.  GSM1275862 N613… untrt untrt SRR1…</span>
+<span class="co">#&gt;  8 ENSG000… SRR103…    394         558.  GSM1275862 N613… untrt untrt SRR1…</span>
+<span class="co">#&gt;  9 ENSG000… SRR103…    172         243.  GSM1275862 N613… untrt untrt SRR1…</span>
+<span class="co">#&gt; 10 ENSG000… SRR103…   2112        2989.  GSM1275862 N613… untrt untrt SRR1…</span>
 <span class="co">#&gt; # … with 40 more rows, and 12 more variables: avgLength &lt;int&gt;,</span>
 <span class="co">#&gt; #   Experiment &lt;fct&gt;, Sample &lt;fct&gt;, BioSample &lt;fct&gt;, sample_name &lt;chr&gt;,</span>
 <span class="co">#&gt; #   TMM &lt;dbl&gt;, multiplier &lt;dbl&gt;, PC1 &lt;dbl&gt;, PC2 &lt;dbl&gt;, symbol &lt;chr&gt;,</span>
@@ -899,7 +869,7 @@ Select one of the multiple choice options in www.menti.com (code in Google doc).
   <span class="co"># create heatmap</span>
   <span class="fu"><a href="https://rdrr.io/pkg/tidyHeatmap/man/heatmap-methods.html">heatmap</a></span><span class="op">(</span>
     .column <span class="op">=</span> <span class="va">sample_name</span>,
-    .row <span class="op">=</span> <span class="va">feature</span>,
+    .row <span class="op">=</span> <span class="va">.feature</span>,
     .value <span class="op">=</span> <span class="va">counts_scaled</span>,
     transform <span class="op">=</span> <span class="va">log1p</span>
   <span class="op">)</span> <span class="op">%&gt;%</span>
@@ -979,18 +949,18 @@ Select one of the multiple choice options in www.menti.com (code in Google doc).
 <span class="va">de_all</span>
 <span class="co">#&gt; # A SummarizedExperiment-tibble abstraction: 127,408 × 43</span>
 <span class="co">#&gt; [90m# Transcripts=15926 | Samples=8 | Assays=counts, counts_scaled[39m</span>
-<span class="co">#&gt;    feature sample counts counts_scaled SampleName cell  dex   albut Run  </span>
-<span class="co">#&gt;    &lt;chr&gt;   &lt;chr&gt;   &lt;int&gt;         &lt;dbl&gt; &lt;fct&gt;      &lt;fct&gt; &lt;fct&gt; &lt;fct&gt; &lt;fct&gt;</span>
-<span class="co">#&gt;  1 ENSG00… SRR10…    679         961.  GSM1275862 N613… untrt untrt SRR1…</span>
-<span class="co">#&gt;  2 ENSG00… SRR10…    467         661.  GSM1275862 N613… untrt untrt SRR1…</span>
-<span class="co">#&gt;  3 ENSG00… SRR10…    260         368.  GSM1275862 N613… untrt untrt SRR1…</span>
-<span class="co">#&gt;  4 ENSG00… SRR10…     60          84.9 GSM1275862 N613… untrt untrt SRR1…</span>
-<span class="co">#&gt;  5 ENSG00… SRR10…   3251        4601.  GSM1275862 N613… untrt untrt SRR1…</span>
-<span class="co">#&gt;  6 ENSG00… SRR10…   1433        2028.  GSM1275862 N613… untrt untrt SRR1…</span>
-<span class="co">#&gt;  7 ENSG00… SRR10…    519         734.  GSM1275862 N613… untrt untrt SRR1…</span>
-<span class="co">#&gt;  8 ENSG00… SRR10…    394         558.  GSM1275862 N613… untrt untrt SRR1…</span>
-<span class="co">#&gt;  9 ENSG00… SRR10…    172         243.  GSM1275862 N613… untrt untrt SRR1…</span>
-<span class="co">#&gt; 10 ENSG00… SRR10…   2112        2989.  GSM1275862 N613… untrt untrt SRR1…</span>
+<span class="co">#&gt;    .feature .sample counts counts_scaled SampleName cell  dex   albut Run  </span>
+<span class="co">#&gt;    &lt;chr&gt;    &lt;chr&gt;    &lt;int&gt;         &lt;dbl&gt; &lt;fct&gt;      &lt;fct&gt; &lt;fct&gt; &lt;fct&gt; &lt;fct&gt;</span>
+<span class="co">#&gt;  1 ENSG000… SRR103…    679         961.  GSM1275862 N613… untrt untrt SRR1…</span>
+<span class="co">#&gt;  2 ENSG000… SRR103…    467         661.  GSM1275862 N613… untrt untrt SRR1…</span>
+<span class="co">#&gt;  3 ENSG000… SRR103…    260         368.  GSM1275862 N613… untrt untrt SRR1…</span>
+<span class="co">#&gt;  4 ENSG000… SRR103…     60          84.9 GSM1275862 N613… untrt untrt SRR1…</span>
+<span class="co">#&gt;  5 ENSG000… SRR103…   3251        4601.  GSM1275862 N613… untrt untrt SRR1…</span>
+<span class="co">#&gt;  6 ENSG000… SRR103…   1433        2028.  GSM1275862 N613… untrt untrt SRR1…</span>
+<span class="co">#&gt;  7 ENSG000… SRR103…    519         734.  GSM1275862 N613… untrt untrt SRR1…</span>
+<span class="co">#&gt;  8 ENSG000… SRR103…    394         558.  GSM1275862 N613… untrt untrt SRR1…</span>
+<span class="co">#&gt;  9 ENSG000… SRR103…    172         243.  GSM1275862 N613… untrt untrt SRR1…</span>
+<span class="co">#&gt; 10 ENSG000… SRR103…   2112        2989.  GSM1275862 N613… untrt untrt SRR1…</span>
 <span class="co">#&gt; # … with 40 more rows, and 34 more variables: avgLength &lt;int&gt;,</span>
 <span class="co">#&gt; #   Experiment &lt;fct&gt;, Sample &lt;fct&gt;, BioSample &lt;fct&gt;, sample_name &lt;chr&gt;,</span>
 <span class="co">#&gt; #   TMM &lt;dbl&gt;, multiplier &lt;dbl&gt;, PC1 &lt;dbl&gt;, PC2 &lt;dbl&gt;, symbol &lt;chr&gt;,</span>
@@ -1013,7 +983,7 @@ Select one of the multiple choice options in www.menti.com (code in Google doc).
   <span class="fu"><a href="https://rdrr.io/pkg/tidySummarizedExperiment/man/dplyr-methods.html">select</a></span><span class="op">(</span><span class="va">edgerQLT_PValue</span>, <span class="va">edgerLR_PValue</span>, <span class="va">voom_P.Value</span>, <span class="va">deseq2_pvalue</span>, <span class="va">feature</span><span class="op">)</span> <span class="op">%&gt;%</span>
   <span class="fu"><a href="https://ggobi.github.io/ggally/reference/ggpairs.html">ggpairs</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">4</span><span class="op">)</span></code></pre></div>
 <p><img src="tidytranscriptomics_files/figure-html/unnamed-chunk-38-1.png" width="700"></p>
-<pre class="challenge_2 challenge"><code>Challenge: Which method detects the most differentially abundant transcripts, p value adjusted for multiple testing &lt;  0.05 (FDR, adj.P.Val, padj)?
+<pre class="challenge_2 challenge"><code>Challenge: Which method detects the largest no. of differentially abundant transcripts, p value adjusted for multiple testing &lt;  0.05 (FDR, adj.P.Val, padj)?
 Select one of the multiple choice options in www.menti.com (code in Google doc).</code></pre>
 </div>
 <div id="single-method" class="section level3">
@@ -1060,8 +1030,7 @@ Select one of the multiple choice options in www.menti.com (code in Google doc).
 <code class="sourceCode R"><span class="va">topgenes_symbols</span> <span class="op">&lt;-</span>
   <span class="va">counts_de</span> <span class="op">%&gt;%</span>
   <span class="fu"><a href="https://rdrr.io/pkg/tidybulk/man/pivot_transcript-methods.html">pivot_transcript</a></span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span>
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/arrange.html">arrange</a></span><span class="op">(</span><span class="va">PValue</span><span class="op">)</span> <span class="op">%&gt;%</span>
-  <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="fl">6</span><span class="op">)</span> <span class="op">%&gt;%</span>
+  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/slice.html">slice_min</a></span><span class="op">(</span><span class="va">PValue</span>, n <span class="op">=</span> <span class="fl">6</span><span class="op">)</span> <span class="op">%&gt;%</span>
   <span class="fu"><a href="https://rdrr.io/pkg/tidySummarizedExperiment/man/dplyr-methods.html">pull</a></span><span class="op">(</span><span class="va">symbol</span><span class="op">)</span>
 
 <span class="va">topgenes_symbols</span>
@@ -1307,38 +1276,6 @@ Select one of the multiple choice options in www.menti.com (code in Google doc).
 <p>If we load the <em>tidySingleCellExperiment</em> package and then view the PBMC data, it displays as a tibble.</p>
 <div class="sourceCode" id="cb39"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/stemangiola/tidySingleCellExperiment">tidySingleCellExperiment</a></span><span class="op">)</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; Attaching package: 'tidySingleCellExperiment'</span>
-<span class="co">#&gt; The following objects are masked from 'package:ensembldb':</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt;     filter, select</span>
-<span class="co">#&gt; The following object is masked from 'package:AnnotationDbi':</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt;     select</span>
-<span class="co">#&gt; The following objects are masked from 'package:tidySummarizedExperiment':</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt;     bind_cols, bind_rows, count, plot_ly, tidy</span>
-<span class="co">#&gt; The following objects are masked from 'package:tidybulk':</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt;     bind_cols, bind_rows</span>
-<span class="co">#&gt; The following object is masked from 'package:plotly':</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt;     plot_ly</span>
-<span class="co">#&gt; The following objects are masked from 'package:dplyr':</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt;     add_count, bind_cols, bind_rows, count</span>
-<span class="co">#&gt; The following object is masked from 'package:IRanges':</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt;     slice</span>
-<span class="co">#&gt; The following object is masked from 'package:S4Vectors':</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt;     rename</span>
-<span class="co">#&gt; The following object is masked from 'package:matrixStats':</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt;     count</span>
-<span class="co">#&gt; The following object is masked from 'package:stats':</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt;     filter</span>
 
 <span class="va">pbmc</span>
 <span class="co">#&gt; # A SingleCellExperiment-tibble abstraction: 3,000 × 8</span>
@@ -1732,7 +1669,8 @@ This one is not a Menti quiz question.    </code></pre>
 10 SCP591       &lt;SnglCllE[,300]&gt; &lt;tibble [300 × 8]&gt;</code></pre>
 <p>We will create a table (tibble) with the mitochondrial QC information for each dataset.</p>
 <div class="sourceCode" id="cb60"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co"># &lt;INSERT THE CODE HERE FROM THE SOLUTIONS&gt;</span>
+<code class="sourceCode R"><span class="co"># &lt;INSERT THE CODE HERE FROM THE SOLUTION&gt;</span>
+<span class="co"># It should create the same table as mito_info_all_datasets below</span>
 <span class="va">mito_info_all_datasets</span> <span class="op">=</span> <span class="fu">rpharma2021tidytranscriptomics</span><span class="fu">::</span><span class="va"><a href="../reference/mito_info_all_datasets.html">mito_info_all_datasets</a></span> </code></pre></div>
 <p>As before, we join the mitochondrial information to the original data.</p>
 <div class="sourceCode" id="cb61"><pre class="downlit sourceCode r">
@@ -1880,15 +1818,15 @@ This one is not a Menti quiz question.    </code></pre>
 <span class="co">#&gt; # A tibble: 11 × 2</span>
 <span class="co">#&gt;    label     n</span>
 <span class="co">#&gt;    &lt;fct&gt; &lt;int&gt;</span>
-<span class="co">#&gt;  1 1       463</span>
-<span class="co">#&gt;  2 2       793</span>
-<span class="co">#&gt;  3 3       522</span>
+<span class="co">#&gt;  1 1       465</span>
+<span class="co">#&gt;  2 2       769</span>
+<span class="co">#&gt;  3 3       545</span>
 <span class="co">#&gt;  4 4       350</span>
 <span class="co">#&gt;  5 5       339</span>
 <span class="co">#&gt;  6 6        21</span>
-<span class="co">#&gt;  7 7       256</span>
-<span class="co">#&gt;  8 8        41</span>
-<span class="co">#&gt;  9 9        74</span>
+<span class="co">#&gt;  7 7       255</span>
+<span class="co">#&gt;  8 8        74</span>
+<span class="co">#&gt;  9 9        41</span>
 <span class="co">#&gt; 10 10       14</span>
 <span class="co">#&gt; 11 11       26</span></code></pre></div>
 </div>
@@ -1920,19 +1858,17 @@ This one is not a Menti quiz question.    </code></pre>
 <span class="co">#&gt; #   high_mitochondrion &lt;lgl&gt;, dataset &lt;chr&gt;, label &lt;fct&gt;, corrected1 &lt;dbl&gt;,</span>
 <span class="co">#&gt; #   corrected2 &lt;dbl&gt;, corrected3 &lt;dbl&gt;, corrected4 &lt;dbl&gt;, corrected5 &lt;dbl&gt;,</span>
 <span class="co">#&gt; #   UMAP1 &lt;dbl&gt;, UMAP2 &lt;dbl&gt;</span></code></pre></div>
-<pre class="challenge_5 challenge"><code>Without creating any variable, check if the variability explained by the first UMAP dimension when calculating 2 components (ncomponents = 2) is equal/more/less than when calculating 3 components.
+<pre class="challenge_5 challenge"><code>Is the variability of the 1st UMAP dimension when calculating 2 components (ncomponents = 2) equal/more/less than when calculating 3 components?
 Select one of the multiple choice options in www.menti.com (code in Google doc).</code></pre>
 <p><strong>Tip: your can use as_tibble() to convert the tibble abstraction to a simple (and light) cell-wise tibble</strong></p>
-<div class="sourceCode" id="cb70"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co"># &lt;INSERT THE CODE HERE FROM THE SOLUTIONS&gt;</span></code></pre></div>
 <p>We can calculate the first 3 UMAP dimensions using the scater framework.</p>
-<div class="sourceCode" id="cb71"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb70"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># Calculate UMAP with scater</span>
 <span class="va">pbmc</span> <span class="op">&lt;-</span>
   <span class="va">pbmc</span> <span class="op">%&gt;%</span>
   <span class="fu"><a href="https://rdrr.io/pkg/scater/man/runUMAP.html">runUMAP</a></span><span class="op">(</span>ncomponents <span class="op">=</span> <span class="fl">3</span>, dimred<span class="op">=</span><span class="st">"corrected"</span><span class="op">)</span> <span class="co"># from scater</span></code></pre></div>
 <p>And we can plot the clusters as a 3D plot using plotly. This time we are colouring by estimated cluster labels to visually check the cluster labels.</p>
-<div class="sourceCode" id="cb72"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb71"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">pbmc</span> <span class="op">%&gt;%</span>
   <span class="fu"><a href="https://rdrr.io/pkg/tidySingleCellExperiment/man/plot_ly.html">plot_ly</a></span><span class="op">(</span>
     x <span class="op">=</span> <span class="op">~</span><span class="va">`UMAP1`</span>,
@@ -1951,7 +1887,7 @@ Select one of the multiple choice options in www.menti.com (code in Google doc).
 <h3 class="hasAnchor">
 <a href="#manual-cell-type-classification" class="anchor"></a>Manual cell type classification</h3>
 <p>We can identify cluster markers (genes). As example, we are selecting the top 10 for each cluster. We can then plot a heatmap of those gene markers across cells.</p>
-<div class="sourceCode" id="cb73"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb72"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># Identify top 10 markers per cluster</span>
 <span class="va">marker_genes</span> <span class="op">&lt;-</span>
     <span class="va">pbmc</span> <span class="op">%&gt;%</span>
@@ -1968,13 +1904,13 @@ Select one of the multiple choice options in www.menti.com (code in Google doc).
     colour_columns_by<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"label"</span><span class="op">)</span>,
     exprs_values  <span class="op">=</span> <span class="st">"reconstructed"</span>
   <span class="op">)</span></code></pre></div>
-<p><img src="tidytranscriptomics_files/figure-html/unnamed-chunk-82-1.png" width="700"></p>
+<p><img src="tidytranscriptomics_files/figure-html/unnamed-chunk-81-1.png" width="700"></p>
 </div>
 <div id="automatic-cell-type-classification" class="section level3">
 <h3 class="hasAnchor">
 <a href="#automatic-cell-type-classification" class="anchor"></a>Automatic cell type classification</h3>
 <p>We can infer cell type identities (e.g. T cell) using <em>SingleR</em> <span class="citation">(Aran et al. 2019)</span> and manipulate the output using tidyverse. SingleR <a href="https://bioconductor.org/packages/devel/bioc/vignettes/SingleR/inst/doc/SingleR.html">accepts any log-normalised transcript abundance matrix</a></p>
-<div class="sourceCode" id="cb74"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb73"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># Reference cell types</span>
 <span class="va">blueprint</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/SingleR/man/datasets.html">BlueprintEncodeData</a></span><span class="op">(</span><span class="op">)</span>
 <span class="co">#&gt; snapshotDate(): 2021-10-18</span>
@@ -2011,12 +1947,12 @@ Select one of the multiple choice options in www.menti.com (code in Google doc).
 <span class="co">#&gt;  5 5     Monocytes      </span>
 <span class="co">#&gt;  6 6     Smooth muscle  </span>
 <span class="co">#&gt;  7 7     NK cells       </span>
-<span class="co">#&gt;  8 8     Macrophages    </span>
-<span class="co">#&gt;  9 9     Neutrophils    </span>
+<span class="co">#&gt;  8 8     Neutrophils    </span>
+<span class="co">#&gt;  9 9     Macrophages    </span>
 <span class="co">#&gt; 10 10    B-cells        </span>
 <span class="co">#&gt; 11 11    Monocytes</span></code></pre></div>
 <p>We join the cell type information to our pbmc data.</p>
-<div class="sourceCode" id="cb75"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb74"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># Join cell type info</span>
 <span class="va">pbmc</span> <span class="op">&lt;-</span>
   <span class="va">pbmc</span> <span class="op">%&gt;%</span>
@@ -2045,12 +1981,8 @@ Select one of the multiple choice options in www.menti.com (code in Google doc).
 <span class="co">#&gt; #   dataset &lt;chr&gt;, label &lt;chr&gt;, corrected1 &lt;dbl&gt;, corrected2 &lt;dbl&gt;,</span>
 <span class="co">#&gt; #   corrected3 &lt;dbl&gt;, corrected4 &lt;dbl&gt;, corrected5 &lt;dbl&gt;, UMAP1 &lt;dbl&gt;,</span>
 <span class="co">#&gt; #   UMAP2 &lt;dbl&gt;, UMAP3 &lt;dbl&gt;</span></code></pre></div>
-<div id="challenge-use-tidyverse-grammar-to-identify-the-most-abundant-cell-type" class="section level4">
-<h4 class="hasAnchor">
-<a href="#challenge-use-tidyverse-grammar-to-identify-the-most-abundant-cell-type" class="anchor"></a>Challenge: use tidyverse grammar to identify the most abundant cell type</h4>
-<div class="sourceCode" id="cb76"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co"># &lt;INSERT THE CODE HERE FROM THE SOLUTIONS&gt;</span></code></pre></div>
-</div>
+<pre class="challenge_6 challenge"><code>Challenge: Which cell type (first.label) has the largest no. of cells?
+Select one of the multiple choice options in www.menti.com (code in Google doc).   </code></pre>
 </div>
 </div>
 <div id="pseudobulk-analyses" class="section level2">
@@ -2061,12 +1993,12 @@ Select one of the multiple choice options in www.menti.com (code in Google doc).
 <h3 class="hasAnchor">
 <a href="#data-exploration-using-pseudobulk-samples" class="anchor"></a>Data exploration using pseudobulk samples</h3>
 <p>To do this, we will use a helper function called aggregate_cells, available in this workshop package, to create a group for each sample.</p>
-<div class="sourceCode" id="cb77"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb76"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># Aggregate</span>
 <span class="va">pbmc_bulk</span> <span class="op">&lt;-</span>
   <span class="fu">rpharma2021tidytranscriptomics</span><span class="fu">::</span><span class="va"><a href="../reference/pbmc.html">pbmc</a></span> <span class="op">%&gt;%</span>
   <span class="fu">rpharma2021tidytranscriptomics</span><span class="fu">::</span><span class="fu">aggregate_cells</span><span class="op">(</span><span class="va">file</span><span class="op">)</span></code></pre></div>
-<div class="sourceCode" id="cb78"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb77"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">pbmc_bulk</span> <span class="op">%&gt;%</span>
 
   <span class="co"># Tidybulk operations</span>
@@ -2097,14 +2029,14 @@ Select one of the multiple choice options in www.menti.com (code in Google doc).
 <p>In Part 2 we showed how we can study the cell-type composition of a biological sample using bulk RNA sequencing. Single cell sequencing enables a more direct estimation of cell-type composition and gives greater resolution. For bulk RNA sequencing we need to infer the cell types using the abundance of transcripts in the whole sample, with single-cell RNA sequencing we can directly measure the transcripts in each cell and then classify the cells into cell types.</p>
 <p>Seurat is a very popular analysis toolkit for single cell RNA sequencing data <span class="citation">(Butler et al. 2018; Stuart et al. 2019)</span> .</p>
 <p>tidyseurat provides a bridge between the Seurat single-cell package <span class="citation">(Butler et al. 2018; Stuart et al. 2019)</span> and the tidyverse <span class="citation">(Wickham et al. 2019)</span>. It creates an invisible layer that enables viewing the Seurat object as a tidyverse tibble, and provides Seurat-compatible <em>dplyr</em>, <em>tidyr</em>, <em>ggplot</em> and <em>plotly</em> functions.</p>
-<div class="sourceCode" id="cb79"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb78"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">pbmc_seurat</span> <span class="op">&lt;-</span> <span class="fu">rpharma2021tidytranscriptomics</span><span class="fu">::</span><span class="va"><a href="../reference/pbmc_seurat.html">pbmc_seurat</a></span>
 <span class="co">#&gt; Registered S3 method overwritten by 'spatstat.geom':</span>
 <span class="co">#&gt;   method     from</span>
 <span class="co">#&gt;   print.boxx cli</span></code></pre></div>
-<div class="sourceCode" id="cb80"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb79"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/stemangiola/tidyseurat">tidyseurat</a></span><span class="op">)</span></code></pre></div>
-<div class="sourceCode" id="cb81"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb80"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">pbmc_seurat</span>
 <span class="co">#&gt; # A Seurat-tibble abstraction: 80 × 9</span>
 <span class="co">#&gt; [90m# Features=230 | Active assay=RNA | Assays=RNA[39m</span>
@@ -2122,7 +2054,7 @@ Select one of the multiple choice options in www.menti.com (code in Google doc).
 <span class="co">#&gt; 10 AATG… SeuratPro…        100           41 0               A             g1    </span>
 <span class="co">#&gt; # … with 70 more rows, and 2 more variables: RNA_snn_res.1 &lt;fct&gt;, file &lt;chr&gt;</span></code></pre></div>
 <p>It can be interacted with using <a href="https://bioconductor.org/packages/release/bioc/vignettes/SingleCellExperiment/inst/doc/intro.html">SingleCellExperiment commands</a> such as <code>assayNames</code>.</p>
-<div class="sourceCode" id="cb82"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb81"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu">Assays</span><span class="op">(</span><span class="va">pbmc_seurat</span><span class="op">)</span>
 <span class="co">#&gt; [1] "RNA"</span></code></pre></div>
 <p>We can also interact with our object as we do with any tidyverse tibble.</p>
@@ -2130,7 +2062,7 @@ Select one of the multiple choice options in www.menti.com (code in Google doc).
 <h3 class="hasAnchor">
 <a href="#tidyverse-commands-2" class="anchor"></a>Tidyverse commands</h3>
 <p>We can interact to this object in the same way we interact with <code>SingleCellExperiment</code>, through the tidy paradigm</p>
-<div class="sourceCode" id="cb83"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb82"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># Filter</span>
 <span class="va">pbmc_seurat</span> <span class="op">%&gt;%</span> <span class="fu"><a href="https://rdrr.io/pkg/tidyseurat/man/dplyr-methods.html">filter</a></span><span class="op">(</span><span class="va">groups</span> <span class="op">==</span> <span class="st">"g1"</span><span class="op">)</span>
 <span class="co">#&gt; # A Seurat-tibble abstraction: 44 × 9</span>
@@ -2235,7 +2167,7 @@ Select one of the multiple choice options in www.menti.com (code in Google doc).
 <h1 class="hasAnchor">
 <a href="#reproducibility" class="anchor"></a>Reproducibility</h1>
 <p>Record package and version information with <code>sessionInfo</code></p>
-<div class="sourceCode" id="cb84"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb83"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/sessionInfo.html">sessionInfo</a></span><span class="op">(</span><span class="op">)</span>
 <span class="co">#&gt; R version 4.1.1 (2021-08-10)</span>
 <span class="co">#&gt; Platform: x86_64-pc-linux-gnu (64-bit)</span>
