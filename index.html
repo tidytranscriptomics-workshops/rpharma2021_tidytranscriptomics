@@ -105,7 +105,7 @@ Sys.setenv("R_REMOTES_NO_ERRORS_FROM_WARNINGS" = "true")
 remotes::install_github("stemangiola/tidySummarizedExperiment@v1.5.1")
 
 # Install workshop package
-remotes::install_github("tidytranscriptomics-workshops/rpharma2021_tidytranscriptomics", build_vignettes = TRUE)
+remotes::install_github(c("stemangiola/tidybulk@v1.5.5", "stemangiola/tidySummarizedExperiment@v1.5.1", "stemangiola/tidySingleCellExperiment@v1.3.2"))
 
 # To view vignettes
 library(rpharma2021tidytranscriptomics)
