@@ -1,7 +1,7 @@
 on: [push]
 
 env:
-  cache-version: v2
+  cache-version: v3
   repo-name: tidytranscriptomics-workshops/rpharma2021_tidytranscriptomics
   GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }} 
 
