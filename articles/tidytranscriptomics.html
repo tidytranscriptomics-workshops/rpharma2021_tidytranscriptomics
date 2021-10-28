@@ -540,6 +540,112 @@ RStudio Cloud project
 <span class="co">#&gt; # … with 512,806 more rows</span></code></pre></div>
 </div>
 </div>
+<div id="tidybulk-workflow-functionsutilities-available" class="section level2">
+<h2 class="hasAnchor">
+<a href="#tidybulk-workflow-functionsutilities-available" class="anchor"></a>Tidybulk workflow: functions/utilities available</h2>
+<table class="table">
+<colgroup>
+<col width="48%">
+<col width="52%">
+</colgroup>
+<thead><tr class="header">
+<th>Function</th>
+<th>Description</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td><code>aggregate_duplicates</code></td>
+<td>Aggregate abundance and annotation of duplicated transcripts in a robust way</td>
+</tr>
+<tr class="even">
+<td>
+<code>identify_abundant</code> <code>keep_abundant</code>
+</td>
+<td>identify or keep the abundant genes</td>
+</tr>
+<tr class="odd">
+<td><code>keep_variable</code></td>
+<td>Filter for top variable features</td>
+</tr>
+<tr class="even">
+<td><code>scale_abundance</code></td>
+<td>Scale (normalise) abundance for RNA sequencing depth</td>
+</tr>
+<tr class="odd">
+<td><code>reduce_dimensions</code></td>
+<td>Perform dimensionality reduction (PCA, MDS, tSNE, UMAP)</td>
+</tr>
+<tr class="even">
+<td><code>cluster_elements</code></td>
+<td>Labels elements with cluster identity (kmeans, SNN)</td>
+</tr>
+<tr class="odd">
+<td><code>remove_redundancy</code></td>
+<td>Filter out elements with highly correlated features</td>
+</tr>
+<tr class="even">
+<td><code>adjust_abundance</code></td>
+<td>Remove known unwanted variation (Combat)</td>
+</tr>
+<tr class="odd">
+<td><code>test_differential_abundance</code></td>
+<td>Differential transcript abundance testing (DESeq2, edgeR, voom)</td>
+</tr>
+<tr class="even">
+<td><code>deconvolve_cellularity</code></td>
+<td>Estimated tissue composition (Cibersort, llsr, epic, xCell, mcp_counter, quantiseq</td>
+</tr>
+<tr class="odd">
+<td><code>test_differential_cellularity</code></td>
+<td>Differential cell-type abundance testing</td>
+</tr>
+<tr class="even">
+<td><code>test_stratification_cellularity</code></td>
+<td>Estimate Kaplan-Meier survival differences</td>
+</tr>
+<tr class="odd">
+<td><code>test_gene_enrichment</code></td>
+<td>Gene enrichment analyses (EGSEA)</td>
+</tr>
+<tr class="even">
+<td><code>test_gene_overrepresentation</code></td>
+<td>Gene enrichment on list of transcript names (no rank)</td>
+</tr>
+<tr class="odd">
+<td><code>test_gene_rank</code></td>
+<td>Gene enrichment on list of transcript (GSEA)</td>
+</tr>
+<tr class="even">
+<td><code>impute_missing_abundance</code></td>
+<td>Impute abundance for missing data points using sample groupings</td>
+</tr>
+</tbody>
+</table>
+<table class="table">
+<thead><tr class="header">
+<th>Utilities</th>
+<th>Description</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td><code>get_bibliography</code></td>
+<td>Get the bibliography of your workflow</td>
+</tr>
+<tr class="even">
+<td><code>pivot_sample</code></td>
+<td>Select sample-wise columns/information</td>
+</tr>
+<tr class="odd">
+<td><code>pivot_transcript</code></td>
+<td>Select transcript-wise columns/information</td>
+</tr>
+<tr class="even">
+<td><code>describe_transcript</code></td>
+<td>Add gene description from gene symbol</td>
+</tr>
+</tbody>
+</table>
+</div>
 <div id="setting-up-the-data" class="section level2">
 <h2 class="hasAnchor">
 <a href="#setting-up-the-data" class="anchor"></a>Setting up the data</h2>
@@ -1752,16 +1858,16 @@ This one is not a Menti quiz question.    </code></pre>
 <span class="co">#&gt; [90m# Features=51958 | Assays=reconstructed[39m</span>
 <span class="co">#&gt;    cell  label batch groups sample orig.ident nCount_RNA nFeature_RNA  S.Score</span>
 <span class="co">#&gt;    &lt;chr&gt; &lt;fct&gt; &lt;int&gt; &lt;chr&gt;  &lt;chr&gt;  &lt;chr&gt;           &lt;dbl&gt;        &lt;int&gt;    &lt;dbl&gt;</span>
-<span class="co">#&gt;  1 CCAG… 5         1 1      GSE11… SeuratPro…       3421          979 -5.42e-2</span>
-<span class="co">#&gt;  2 ATGA… 3         1 2      GSE11… SeuratPro…       2752          898 -5.01e-2</span>
-<span class="co">#&gt;  3 TATG… 2         1 2      GSE11… SeuratPro…       2114          937 -2.95e-5</span>
-<span class="co">#&gt;  4 CATA… 11        1 1      GSE11… SeuratPro…       3122         1086 -6.65e-2</span>
+<span class="co">#&gt;  1 CCAG… 6         1 1      GSE11… SeuratPro…       3421          979 -5.42e-2</span>
+<span class="co">#&gt;  2 ATGA… 1         1 2      GSE11… SeuratPro…       2752          898 -5.01e-2</span>
+<span class="co">#&gt;  3 TATG… 8         1 2      GSE11… SeuratPro…       2114          937 -2.95e-5</span>
+<span class="co">#&gt;  4 CATA… 12        1 1      GSE11… SeuratPro…       3122         1086 -6.65e-2</span>
 <span class="co">#&gt;  5 GAGG… 2         1 2      GSE11… SeuratPro…       2341          957 -3.74e-3</span>
-<span class="co">#&gt;  6 AGCT… 4         1 1      GSE11… SeuratPro…       5472         1758 -5.88e-2</span>
-<span class="co">#&gt;  7 TGAT… 1         1 1      GSE11… SeuratPro…       1258          542 -2.51e-2</span>
-<span class="co">#&gt;  8 ACGA… 1         1 1      GSE11… SeuratPro…       7683         1926 -1.33e-1</span>
-<span class="co">#&gt;  9 CGGC… 5         1 1      GSE11… SeuratPro…       3500         1092 -6.87e-2</span>
-<span class="co">#&gt; 10 ATAG… 5         1 1      GSE11… SeuratPro…       3092          974 -1.24e-2</span>
+<span class="co">#&gt;  6 AGCT… 5         1 1      GSE11… SeuratPro…       5472         1758 -5.88e-2</span>
+<span class="co">#&gt;  7 TGAT… 3         1 1      GSE11… SeuratPro…       1258          542 -2.51e-2</span>
+<span class="co">#&gt;  8 ACGA… 3         1 1      GSE11… SeuratPro…       7683         1926 -1.33e-1</span>
+<span class="co">#&gt;  9 CGGC… 6         1 1      GSE11… SeuratPro…       3500         1092 -6.87e-2</span>
+<span class="co">#&gt; 10 ATAG… 6         1 1      GSE11… SeuratPro…       3092          974 -1.24e-2</span>
 <span class="co">#&gt; # … with 2,889 more rows, and 15 more variables: G2M.Score &lt;dbl&gt;, ident &lt;fct&gt;,</span>
 <span class="co">#&gt; #   sum &lt;dbl&gt;, detected &lt;int&gt;, subsets_Mito_sum &lt;dbl&gt;,</span>
 <span class="co">#&gt; #   subsets_Mito_detected &lt;int&gt;, subsets_Mito_percent &lt;dbl&gt;, total &lt;dbl&gt;,</span>
@@ -1771,20 +1877,21 @@ This one is not a Menti quiz question.    </code></pre>
 <div class="sourceCode" id="cb67"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">pbmc</span> <span class="op">%&gt;%</span> <span class="fu"><a href="https://rdrr.io/pkg/tidySingleCellExperiment/man/count.html">count</a></span><span class="op">(</span><span class="va">label</span><span class="op">)</span>
 <span class="co">#&gt; tidySingleCellExperiment says: A data frame is returned for independent data analysis.</span>
-<span class="co">#&gt; # A tibble: 11 × 2</span>
+<span class="co">#&gt; # A tibble: 12 × 2</span>
 <span class="co">#&gt;    label     n</span>
 <span class="co">#&gt;    &lt;fct&gt; &lt;int&gt;</span>
-<span class="co">#&gt;  1 1       367</span>
-<span class="co">#&gt;  2 2       502</span>
-<span class="co">#&gt;  3 3       736</span>
-<span class="co">#&gt;  4 4       545</span>
-<span class="co">#&gt;  5 5       339</span>
-<span class="co">#&gt;  6 6        21</span>
-<span class="co">#&gt;  7 7       234</span>
-<span class="co">#&gt;  8 8        74</span>
-<span class="co">#&gt;  9 9        41</span>
-<span class="co">#&gt; 10 10       14</span>
-<span class="co">#&gt; 11 11       26</span></code></pre></div>
+<span class="co">#&gt;  1 1       821</span>
+<span class="co">#&gt;  2 2       447</span>
+<span class="co">#&gt;  3 3       351</span>
+<span class="co">#&gt;  4 4        16</span>
+<span class="co">#&gt;  5 5       494</span>
+<span class="co">#&gt;  6 6       339</span>
+<span class="co">#&gt;  7 7        21</span>
+<span class="co">#&gt;  8 8       255</span>
+<span class="co">#&gt;  9 9        74</span>
+<span class="co">#&gt; 10 10       41</span>
+<span class="co">#&gt; 11 11       14</span>
+<span class="co">#&gt; 12 12       26</span></code></pre></div>
 </div>
 <div id="reduce-dimensions" class="section level2">
 <h2 class="hasAnchor">
@@ -1895,20 +2002,21 @@ Select one of the multiple choice options in www.menti.com (code in Google doc).
   <span class="fu"><a href="https://rdrr.io/pkg/tidySingleCellExperiment/man/dplyr-methods.html">select</a></span><span class="op">(</span><span class="va">label</span>, <span class="va">first.labels</span><span class="op">)</span>
 
 <span class="va">cell_type</span>
-<span class="co">#&gt; # A tibble: 11 × 2</span>
+<span class="co">#&gt; # A tibble: 12 × 2</span>
 <span class="co">#&gt;    label first.labels   </span>
 <span class="co">#&gt;    &lt;chr&gt; &lt;chr&gt;          </span>
-<span class="co">#&gt;  1 1     B-cells        </span>
+<span class="co">#&gt;  1 1     Skeletal muscle</span>
 <span class="co">#&gt;  2 2     NK cells       </span>
-<span class="co">#&gt;  3 3     Skeletal muscle</span>
-<span class="co">#&gt;  4 4     Fibroblasts    </span>
-<span class="co">#&gt;  5 5     Monocytes      </span>
-<span class="co">#&gt;  6 6     Smooth muscle  </span>
-<span class="co">#&gt;  7 7     NK cells       </span>
-<span class="co">#&gt;  8 8     Neutrophils    </span>
-<span class="co">#&gt;  9 9     Macrophages    </span>
-<span class="co">#&gt; 10 10    B-cells        </span>
-<span class="co">#&gt; 11 11    Monocytes</span></code></pre></div>
+<span class="co">#&gt;  3 3     B-cells        </span>
+<span class="co">#&gt;  4 4     B-cells        </span>
+<span class="co">#&gt;  5 5     Fibroblasts    </span>
+<span class="co">#&gt;  6 6     Monocytes      </span>
+<span class="co">#&gt;  7 7     Smooth muscle  </span>
+<span class="co">#&gt;  8 8     NK cells       </span>
+<span class="co">#&gt;  9 9     Neutrophils    </span>
+<span class="co">#&gt; 10 10    Macrophages    </span>
+<span class="co">#&gt; 11 11    B-cells        </span>
+<span class="co">#&gt; 12 12    Monocytes</span></code></pre></div>
 <p>We join the cell type information to our pbmc data.</p>
 <div class="sourceCode" id="cb75"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># Join cell type info</span>
