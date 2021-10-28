@@ -219,10 +219,10 @@ Alternatively, you can view the material at the workshop webpage [here](https://
 
 ## What is tidytranscriptomics?
 
-[tidybulk](https://stemangiola.github.io/tidybulk/), [tidySummarizedExperiment](https://stemangiola.github.io/tidySummarizedExperiment/) and [tidySingleCellExperiment](https://stemangiola.github.io/tidySingleCellExperiment/) are part of the tidytranscriptomics suite that introduces a tidy approach to RNA sequencing data representation and analysis. The roadmap for the development of the tidytranscriptomics packages is shown in the figure below.
+[tidybulk](https://stemangiola.github.io/tidybulk/), [tidySummarizedExperiment](https://stemangiola.github.io/tidySummarizedExperiment/) and [tidySingleCellExperiment](https://stemangiola.github.io/tidySingleCellExperiment/) are part of the tidytranscriptomics suite that introduces a tidy approach to RNA sequencing data representation and analysis. A diagram showing how the tidytranscriptomics packages integrate the [tidyverse] (https://www.tidyverse.org/) with [Bioconductor](https://www.bioconductor.org/) and [Seurat](https://satijalab.org/seurat/) is shown in the figure below.
 
 ```{r, echo=FALSE, out.width = "600px"}
-knitr::include_graphics("../inst/vignettes/roadmap.png")
+knitr::include_graphics("../inst/vignettes/roadmap_integration.png")
 ```
 
 # Part 1 Bulk RNA sequencing with tidySummarizedExperiment and tidybulk
@@ -341,14 +341,14 @@ airway %>% filter(dex == "trt")
 We can use `select` to choose columns, for example, to see the sample, cell line and treatment columns.
 
 ```{r}
-airway %>% select(sample, cell, dex)
+airway %>% select(.sample, cell, dex)
 ```
 
 We can combine `group_by` and `summarise` to calculate the total counts for each sample.
 
 ```{r}
 airway %>%
-    group_by(sample) %>%
+    group_by(.sample) %>%
     summarise(total_counts=sum(counts))
 ```
 
@@ -356,9 +356,9 @@ We can use `mutate` to create a column. For example, we could create a new sampl
 
 ```{r}
 airway %>%
-  mutate(sample_name=str_remove(sample, "SRR1039")) %>%
+  mutate(sample_name=str_remove(.sample, "SRR1039")) %>%
   # select columns to view    
-  select(sample, sample_name)
+  select(.sample, sample_name)
 ```
 
 
@@ -401,9 +401,9 @@ We'll set up the airway data for our RNA sequencing analysis. We'll create a col
 # setup data workflow
 counts <-
   airway %>%
-  mutate(sample_name = str_remove(sample, "SRR1039")) %>%
+  mutate(sample_name = str_remove(.sample, "SRR1039")) %>%
   mutate(symbol = AnnotationDbi::mapIds(org.Hs.eg.db::org.Hs.eg.db,
-    keys = feature,
+    keys = .feature,
     keytype = "ENSEMBL",
     column = "SYMBOL",
     multiVals = "first"
@@ -577,7 +577,7 @@ counts_scal_PCA %>%
   # create heatmap
   heatmap(
     .column = sample_name,
-    .row = feature,
+    .row = .feature,
     .value = counts_scaled,
     transform = log1p
   ) %>%
@@ -667,7 +667,7 @@ de_all %>%
 ```
 
 ```{challenge_2 class.source="challenge"}
-Challenge: Which method detects the most differentially abundant transcripts, p value adjusted for multiple testing <  0.05 (FDR, adj.P.Val, padj)?
+Challenge: Which method detects the largest no. of differentially abundant transcripts, p value adjusted for multiple testing <  0.05 (FDR, adj.P.Val, padj)?
 Select one of the multiple choice options in www.menti.com (code in Google doc).
 ```
 
@@ -719,8 +719,7 @@ We'll extract the symbols for a few top genes (by P value) to use in a more info
 topgenes_symbols <-
   counts_de %>%
   pivot_transcript() %>%
-  arrange(PValue) %>%
-  head(6) %>%
+  slice_min(PValue, n = 6) %>%
   pull(symbol)
 
 topgenes_symbols
@@ -859,7 +858,7 @@ pbmc
 
 If we load the *tidySingleCellExperiment* package and then view the PBMC data, it displays as a tibble.
 
-```{r}
+```{r message=FALSE, warning=FALSE}
 library(tidySingleCellExperiment)
 
 pbmc
@@ -1085,7 +1084,8 @@ We want to obtain this table
 We will create a table (tibble) with the mitochondrial QC information for each dataset. 
 
 ```{r}
-# <INSERT THE CODE HERE FROM THE SOLUTIONS>
+# <INSERT THE CODE HERE FROM THE SOLUTION>
+# It should create the same table as mito_info_all_datasets below
 mito_info_all_datasets = rpharma2021tidytranscriptomics::mito_info_all_datasets 
 ```
 
@@ -1207,15 +1207,11 @@ runUMAP(ncomponents = 2, dimred="corrected") # from scater
 ```
 
 ```{challenge_5 class.source="challenge"}
-Without creating any variable, check if the variability explained by the first UMAP dimension when calculating 2 components (ncomponents = 2) is equal/more/less than when calculating 3 components.
+Is the variability of the 1st UMAP dimension when calculating 2 components (ncomponents = 2) equal/more/less than when calculating 3 components?
 Select one of the multiple choice options in www.menti.com (code in Google doc).
 ```
 
 **Tip: your can use as_tibble() to convert the tibble abstraction to a simple (and light) cell-wise tibble**
-
-```{r}
-# <INSERT THE CODE HERE FROM THE SOLUTIONS>
-```
 
 We can calculate the first 3 UMAP dimensions using the scater framework.
 
@@ -1309,11 +1305,12 @@ pbmc <-
 pbmc %>% select(cell, first.labels, everything())
 ```
 
-#### Challenge: use tidyverse grammar to identify the most abundant cell type
 
-```{r}
-# <INSERT THE CODE HERE FROM THE SOLUTIONS>
+```{challenge_6 class.source="challenge"}
+Challenge: Which cell type (first.label) has the largest no. of cells?
+Select one of the multiple choice options in www.menti.com (code in Google doc).   
 ```
+
 
 ## Pseudobulk analyses
 
