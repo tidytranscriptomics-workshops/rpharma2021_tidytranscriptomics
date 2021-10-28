@@ -341,14 +341,14 @@ airway %>% filter(dex == "trt")
 We can use `select` to choose columns, for example, to see the sample, cell line and treatment columns.
 
 ```{r}
-airway %>% select(sample, cell, dex)
+airway %>% select(.sample, cell, dex)
 ```
 
 We can combine `group_by` and `summarise` to calculate the total counts for each sample.
 
 ```{r}
 airway %>%
-    group_by(sample) %>%
+    group_by(.sample) %>%
     summarise(total_counts=sum(counts))
 ```
 
@@ -356,9 +356,9 @@ We can use `mutate` to create a column. For example, we could create a new sampl
 
 ```{r}
 airway %>%
-  mutate(sample_name=str_remove(sample, "SRR1039")) %>%
+  mutate(sample_name=str_remove(.sample, "SRR1039")) %>%
   # select columns to view    
-  select(sample, sample_name)
+  select(.sample, sample_name)
 ```
 
 
@@ -401,9 +401,9 @@ We'll set up the airway data for our RNA sequencing analysis. We'll create a col
 # setup data workflow
 counts <-
   airway %>%
-  mutate(sample_name = str_remove(sample, "SRR1039")) %>%
+  mutate(sample_name = str_remove(.sample, "SRR1039")) %>%
   mutate(symbol = AnnotationDbi::mapIds(org.Hs.eg.db::org.Hs.eg.db,
-    keys = feature,
+    keys = .feature,
     keytype = "ENSEMBL",
     column = "SYMBOL",
     multiVals = "first"
@@ -577,7 +577,7 @@ counts_scal_PCA %>%
   # create heatmap
   heatmap(
     .column = sample_name,
-    .row = feature,
+    .row = .feature,
     .value = counts_scaled,
     transform = log1p
   ) %>%
@@ -719,8 +719,7 @@ We'll extract the symbols for a few top genes (by P value) to use in a more info
 topgenes_symbols <-
   counts_de %>%
   pivot_transcript() %>%
-  arrange(PValue) %>%
-  head(6) %>%
+  slice_min(PValue, n = 6) %>%
   pull(symbol)
 
 topgenes_symbols
