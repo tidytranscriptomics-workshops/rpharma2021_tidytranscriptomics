@@ -667,7 +667,7 @@ de_all %>%
 ```
 
 ```{challenge_2 class.source="challenge"}
-Challenge: Which method detects the most differentially abundant transcripts, p value adjusted for multiple testing <  0.05 (FDR, adj.P.Val, padj)?
+Challenge: Which method detects the largest no. of differentially abundant transcripts, p value adjusted for multiple testing <  0.05 (FDR, adj.P.Val, padj)?
 Select one of the multiple choice options in www.menti.com (code in Google doc).
 ```
 
@@ -1084,7 +1084,8 @@ We want to obtain this table
 We will create a table (tibble) with the mitochondrial QC information for each dataset. 
 
 ```{r}
-# <INSERT THE CODE HERE FROM THE SOLUTIONS>
+# <INSERT THE CODE HERE FROM THE SOLUTION>
+# It should create the same table as mito_info_all_datasets below
 mito_info_all_datasets = rpharma2021tidytranscriptomics::mito_info_all_datasets 
 ```
 
@@ -1206,15 +1207,11 @@ runUMAP(ncomponents = 2, dimred="corrected") # from scater
 ```
 
 ```{challenge_5 class.source="challenge"}
-Without creating any variable, check if the variability explained by the first UMAP dimension when calculating 2 components (ncomponents = 2) is equal/more/less than when calculating 3 components.
+Is the variability of the 1st UMAP dimension when calculating 2 components (ncomponents = 2) equal/more/less than when calculating 3 components?
 Select one of the multiple choice options in www.menti.com (code in Google doc).
 ```
 
 **Tip: your can use as_tibble() to convert the tibble abstraction to a simple (and light) cell-wise tibble**
-
-```{r}
-# <INSERT THE CODE HERE FROM THE SOLUTIONS>
-```
 
 We can calculate the first 3 UMAP dimensions using the scater framework.
 
@@ -1308,11 +1305,12 @@ pbmc <-
 pbmc %>% select(cell, first.labels, everything())
 ```
 
-#### Challenge: use tidyverse grammar to identify the most abundant cell type
 
-```{r}
-# <INSERT THE CODE HERE FROM THE SOLUTIONS>
+```{challenge_6 class.source="challenge"}
+Challenge: Which cell type (first.label) has the largest no. of cells?
+Select one of the multiple choice options in www.menti.com (code in Google doc).   
 ```
+
 
 ## Pseudobulk analyses
 
