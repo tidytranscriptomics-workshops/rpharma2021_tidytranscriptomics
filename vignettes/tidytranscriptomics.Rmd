@@ -858,7 +858,7 @@ pbmc
 
 If we load the *tidySingleCellExperiment* package and then view the PBMC data, it displays as a tibble.
 
-```{r}
+```{r message=FALSE, warning=FALSE}
 library(tidySingleCellExperiment)
 
 pbmc
