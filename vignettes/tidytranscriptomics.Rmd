@@ -362,6 +362,37 @@ airway %>%
 ```
 
 
+## Tidybulk workflow: functions/utilities available
+
+
+Function | Description
+------------ | -------------
+`aggregate_duplicates` | Aggregate abundance and annotation of duplicated transcripts in a robust way
+`identify_abundant` `keep_abundant` | identify or keep the abundant genes
+`keep_variable` | Filter for top variable features
+`scale_abundance` | Scale (normalise) abundance for RNA sequencing depth
+`reduce_dimensions` | Perform dimensionality reduction (PCA, MDS, tSNE, UMAP)
+`cluster_elements` | Labels elements with cluster identity (kmeans, SNN)
+`remove_redundancy` | Filter out elements with highly correlated features
+`adjust_abundance` | Remove known unwanted variation (Combat)
+`test_differential_abundance` | Differential transcript abundance testing (DESeq2, edgeR, voom) 
+`deconvolve_cellularity` | Estimated tissue composition (Cibersort, llsr, epic, xCell, mcp_counter, quantiseq
+`test_differential_cellularity` | Differential cell-type abundance testing
+`test_stratification_cellularity` | Estimate Kaplan-Meier survival differences
+`test_gene_enrichment` | Gene enrichment analyses (EGSEA)
+`test_gene_overrepresentation` | Gene enrichment on list of transcript names (no rank)
+`test_gene_rank` | Gene enrichment on list of transcript (GSEA)
+`impute_missing_abundance` | Impute abundance for missing data points using sample groupings 
+
+
+Utilities | Description
+------------ | -------------
+`get_bibliography` | Get the bibliography of your workflow
+`pivot_sample` | Select sample-wise columns/information
+`pivot_transcript` | Select transcript-wise columns/information
+`describe_transcript` | Add gene description from gene symbol
+
+
 ## Setting up the data
 
 We'll set up the airway data for our RNA sequencing analysis. We'll create a column with shorter sample names and a column with gene symbols. We can get the gene symbols for these Ensembl gene ids using the Bioconductor annotation package for human, `org.Hs.eg.db`.
