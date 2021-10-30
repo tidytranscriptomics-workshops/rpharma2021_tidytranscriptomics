@@ -8,7 +8,7 @@ env:
 jobs:
   job1:
     runs-on: ubuntu-latest
-    container: bioconductor/bioconductor_docker:RELEASE_3_14
+    container: bioconductor/bioconductor_docker
     steps:
       - uses: actions/checkout@v1
 
