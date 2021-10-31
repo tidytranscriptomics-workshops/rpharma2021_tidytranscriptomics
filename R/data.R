@@ -22,10 +22,10 @@
 #' @usage data(pbmc_seurat)
 "pbmc_seurat"
 
-#' mito_info_all_datasets
+#' pbmc_mito_info_all_datasets
 #'
 #' A SingleCellExperiment dataset of single cell RNA sequencing data. Used for one of the exercises
 #'
-#' @format  A Seurat object.
-#' @usage data(mito_info_all_datasets)
-"mito_info_all_datasets"
+#' @format  A SingleCellExperiment object.
+#' @usage data(pbmc_mito_info_all_datasets)
+"pbmc_mito_info_all_datasets"
