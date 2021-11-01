@@ -19,24 +19,24 @@ counts_scal_PCA <-
 
 ```
 de_all %>%
-
-  # Subset transcript information
-  pivot_transcript() %>%
-
-  # Reshape for nesting
-  pivot_longer(
-    cols = -c(feature, .abundant, albut, symbol),
-    names_sep = "_",
-    names_to = c("method", "statistic"),
-    values_to = "value"
-  ) %>%
-
-  # Filter statistic
-  filter(statistic %in% c("FDR", "adj.P.Val", "padj")) %>%
-  filter(value < 0.05) %>%
-
-  # Nesting
-  count(method)
+    
+    # Subset transcript information
+    pivot_transcript() %>%
+    
+    # Reshape for nesting
+    pivot_longer(
+        cols = 4:23,
+        names_sep = "_",
+        names_to = c("method", "statistic"),
+        values_to = "value"
+    ) %>%
+    
+    # Filter statistic
+    filter(statistic %in% c("FDR", "adj.P.Val", "padj")) %>%
+    filter(value < 0.05) %>%
+    
+    # Nesting
+    count(method)
 ```
 
 What is the most abundant cell type overall in BRCA samples?
