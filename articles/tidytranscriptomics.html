@@ -327,7 +327,11 @@ RStudio Cloud project
 <div id="part-1-bulk-rna-sequencing-with-tidysummarizedexperiment-and-tidybulk" class="section level1">
 <h1 class="hasAnchor">
 <a href="#part-1-bulk-rna-sequencing-with-tidysummarizedexperiment-and-tidybulk" class="anchor"></a>Part 1 Bulk RNA sequencing with tidySummarizedExperiment and tidybulk</h1>
-<p><img src="../inst/vignettes/blog_screenshot.PNG" width="100px"></p>
+<div class="figure">
+<img src="../inst/vignettes/blog_screenshot.PNG" alt="[Tidy Transcriptomics blog](https://stemangiola.github.io/tidytranscriptomics/)" width="600px"><p class="caption">
+<a href="https://stemangiola.github.io/tidytranscriptomics/">Tidy Transcriptomics blog</a>
+</p>
+</div>
 <p><img src="../inst/vignettes/tidybulk_logo.png" width="100px"></p>
 <div id="acknowledgements" class="section level3">
 <h3 class="hasAnchor">
@@ -1602,16 +1606,16 @@ Select one of the multiple choice options in www.menti.com (code in Google doc).
 <span class="co">#&gt; [90m# Features=51958 | Assays=reconstructed[39m</span>
 <span class="co">#&gt;    cell  label batch groups sample orig.ident nCount_RNA nFeature_RNA  S.Score</span>
 <span class="co">#&gt;    &lt;chr&gt; &lt;fct&gt; &lt;int&gt; &lt;chr&gt;  &lt;chr&gt;  &lt;chr&gt;           &lt;dbl&gt;        &lt;int&gt;    &lt;dbl&gt;</span>
-<span class="co">#&gt;  1 CCAG… 4         1 1      GSE11… SeuratPro…       3421          979 -5.42e-2</span>
-<span class="co">#&gt;  2 ATGA… 7         1 2      GSE11… SeuratPro…       2752          898 -5.01e-2</span>
-<span class="co">#&gt;  3 TATG… 6         1 2      GSE11… SeuratPro…       2114          937 -2.95e-5</span>
-<span class="co">#&gt;  4 CATA… 13        1 1      GSE11… SeuratPro…       3122         1086 -6.65e-2</span>
-<span class="co">#&gt;  5 GAGG… 1         1 2      GSE11… SeuratPro…       2341          957 -3.74e-3</span>
+<span class="co">#&gt;  1 CCAG… 3         1 1      GSE11… SeuratPro…       3421          979 -5.42e-2</span>
+<span class="co">#&gt;  2 ATGA… 4         1 2      GSE11… SeuratPro…       2752          898 -5.01e-2</span>
+<span class="co">#&gt;  3 TATG… 7         1 2      GSE11… SeuratPro…       2114          937 -2.95e-5</span>
+<span class="co">#&gt;  4 CATA… 14        1 1      GSE11… SeuratPro…       3122         1086 -6.65e-2</span>
+<span class="co">#&gt;  5 GAGG… 10        1 2      GSE11… SeuratPro…       2341          957 -3.74e-3</span>
 <span class="co">#&gt;  6 AGCT… 5         1 1      GSE11… SeuratPro…       5472         1758 -5.88e-2</span>
-<span class="co">#&gt;  7 TGAT… 2         1 1      GSE11… SeuratPro…       1258          542 -2.51e-2</span>
-<span class="co">#&gt;  8 ACGA… 2         1 1      GSE11… SeuratPro…       7683         1926 -1.33e-1</span>
-<span class="co">#&gt;  9 CGGC… 4         1 1      GSE11… SeuratPro…       3500         1092 -6.87e-2</span>
-<span class="co">#&gt; 10 ATAG… 4         1 1      GSE11… SeuratPro…       3092          974 -1.24e-2</span>
+<span class="co">#&gt;  7 TGAT… 1         1 1      GSE11… SeuratPro…       1258          542 -2.51e-2</span>
+<span class="co">#&gt;  8 ACGA… 1         1 1      GSE11… SeuratPro…       7683         1926 -1.33e-1</span>
+<span class="co">#&gt;  9 CGGC… 3         1 1      GSE11… SeuratPro…       3500         1092 -6.87e-2</span>
+<span class="co">#&gt; 10 ATAG… 3         1 1      GSE11… SeuratPro…       3092          974 -1.24e-2</span>
 <span class="co">#&gt; # … with 2,889 more rows, and 15 more variables: G2M.Score &lt;dbl&gt;, ident &lt;fct&gt;,</span>
 <span class="co">#&gt; #   sum &lt;dbl&gt;, detected &lt;int&gt;, subsets_Mito_sum &lt;dbl&gt;,</span>
 <span class="co">#&gt; #   subsets_Mito_detected &lt;int&gt;, subsets_Mito_percent &lt;dbl&gt;, total &lt;dbl&gt;,</span>
@@ -1621,22 +1625,23 @@ Select one of the multiple choice options in www.menti.com (code in Google doc).
 <div class="sourceCode" id="cb57"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">pbmc</span> <span class="op"><a href="https://rdrr.io/pkg/tidySingleCellExperiment/man/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://rdrr.io/pkg/tidySingleCellExperiment/man/count.html">count</a></span><span class="op">(</span><span class="va">label</span><span class="op">)</span>
 <span class="co">#&gt; tidySingleCellExperiment says: A data frame is returned for independent data analysis.</span>
-<span class="co">#&gt; # A tibble: 13 × 2</span>
+<span class="co">#&gt; # A tibble: 14 × 2</span>
 <span class="co">#&gt;    label     n</span>
 <span class="co">#&gt;    &lt;fct&gt; &lt;int&gt;</span>
-<span class="co">#&gt;  1 1       417</span>
-<span class="co">#&gt;  2 2       350</span>
-<span class="co">#&gt;  3 3        16</span>
-<span class="co">#&gt;  4 4       339</span>
-<span class="co">#&gt;  5 5       495</span>
-<span class="co">#&gt;  6 6       277</span>
-<span class="co">#&gt;  7 7       517</span>
-<span class="co">#&gt;  8 8        21</span>
+<span class="co">#&gt;  1 1       351</span>
+<span class="co">#&gt;  2 2        15</span>
+<span class="co">#&gt;  3 3       339</span>
+<span class="co">#&gt;  4 4       526</span>
+<span class="co">#&gt;  5 5       454</span>
+<span class="co">#&gt;  6 6        21</span>
+<span class="co">#&gt;  7 7       256</span>
+<span class="co">#&gt;  8 8       248</span>
 <span class="co">#&gt;  9 9        74</span>
-<span class="co">#&gt; 10 10       41</span>
-<span class="co">#&gt; 11 11      312</span>
-<span class="co">#&gt; 12 12       14</span>
-<span class="co">#&gt; 13 13       26</span></code></pre></div>
+<span class="co">#&gt; 10 10      232</span>
+<span class="co">#&gt; 11 11       41</span>
+<span class="co">#&gt; 12 12      302</span>
+<span class="co">#&gt; 13 13       14</span>
+<span class="co">#&gt; 14 14       26</span></code></pre></div>
 </div>
 <div id="reduce-dimensions" class="section level2">
 <h2 class="hasAnchor">
@@ -1745,22 +1750,23 @@ Select one of the multiple choice options in www.menti.com (code in Google doc).
   <span class="fu"><a href="https://rdrr.io/pkg/tidySingleCellExperiment/man/dplyr-methods.html">select</a></span><span class="op">(</span><span class="va">label</span>, <span class="va">first.labels</span><span class="op">)</span>
 
 <span class="va">cell_type</span>
-<span class="co">#&gt; # A tibble: 13 × 2</span>
+<span class="co">#&gt; # A tibble: 14 × 2</span>
 <span class="co">#&gt;    label first.labels   </span>
 <span class="co">#&gt;    &lt;chr&gt; &lt;chr&gt;          </span>
-<span class="co">#&gt;  1 1     NK cells       </span>
+<span class="co">#&gt;  1 1     B-cells        </span>
 <span class="co">#&gt;  2 2     B-cells        </span>
-<span class="co">#&gt;  3 3     B-cells        </span>
-<span class="co">#&gt;  4 4     Monocytes      </span>
+<span class="co">#&gt;  3 3     Monocytes      </span>
+<span class="co">#&gt;  4 4     Skeletal muscle</span>
 <span class="co">#&gt;  5 5     Fibroblasts    </span>
-<span class="co">#&gt;  6 6     NK cells       </span>
-<span class="co">#&gt;  7 7     Skeletal muscle</span>
-<span class="co">#&gt;  8 8     Smooth muscle  </span>
+<span class="co">#&gt;  6 6     Smooth muscle  </span>
+<span class="co">#&gt;  7 7     NK cells       </span>
+<span class="co">#&gt;  8 8     Astrocytes     </span>
 <span class="co">#&gt;  9 9     Neutrophils    </span>
-<span class="co">#&gt; 10 10    Macrophages    </span>
-<span class="co">#&gt; 11 11    Skeletal muscle</span>
-<span class="co">#&gt; 12 12    B-cells        </span>
-<span class="co">#&gt; 13 13    Monocytes</span></code></pre></div>
+<span class="co">#&gt; 10 10    NK cells       </span>
+<span class="co">#&gt; 11 11    Macrophages    </span>
+<span class="co">#&gt; 12 12    Skeletal muscle</span>
+<span class="co">#&gt; 13 13    B-cells        </span>
+<span class="co">#&gt; 14 14    Monocytes</span></code></pre></div>
 <p>We join the cell type information to our pbmc data.</p>
 <div class="sourceCode" id="cb64"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># Join cell type info</span>

@@ -4,7 +4,7 @@ pkgdown_sha: ~
 articles:
   solutions: solutions.html
   tidytranscriptomics: tidytranscriptomics.html
-last_built: 2021-11-01T08:51Z
+last_built: 2021-11-01T10:31Z
 urls:
   reference: https://tidytranscriptomics-workshops.github.io/rpharma2021_tidytranscriptomics/reference
   article: https://tidytranscriptomics-workshops.github.io/rpharma2021_tidytranscriptomics/articles
