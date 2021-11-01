@@ -19,24 +19,27 @@ counts_scal_PCA <-
 
 ```
 de_all %>%
-
+  
   # Subset transcript information
   pivot_transcript() %>%
-
+  
   # Reshape for nesting
   pivot_longer(
-    cols = -c(feature, .abundant, albut, symbol),
+    cols = -c(feature, symbol, .abundant, group:exon_name),
     names_sep = "_",
     names_to = c("method", "statistic"),
     values_to = "value"
   ) %>%
-
+  
   # Filter statistic
-  filter(statistic %in% c("FDR", "adj.P.Val", "padj")) %>%
+  filter(statistic %in% c("FDR", "adj.P.Val", "padj")) %>%  
   filter(value < 0.05) %>%
-
-  # Nesting
-  count(method)
+  
+  # Counting
+  count(method) %>%
+  
+  # Sort
+  arrange(desc(n))
 ```
 
 What is the most abundant cell type overall in BRCA samples?
@@ -69,7 +72,7 @@ mito_info_all_datasets
 
 ## Reducing dimension - UMAP
 
-UMAP 1 of 2 components has more variability than 3 components
+UMAP 1 of 2 components has **More** variability than 3 components
 
 ```
 left_join(
@@ -85,6 +88,7 @@ left_join(
 ) %>%
     summarise(sd(UMAP1.x), sd(UMAP1.y))
 ```
+
 ## Cell annotation
 
 Skeletal muscle
