@@ -954,34 +954,41 @@ location <- mapIds(
 )
 ```
 
+We'll first show the mitochondrial analysis for one of the 10 datasets.
 
 ```{r}
-pbmc <-
-  pbmc %>%
+one_dataset <- pbmc %>% filter(dataset =="GSE115189")
+```
 
-  # Grouping - nesting by dataset
-  nest(data = -dataset) %>%
-  mutate(mitochondrion_info = map(
-    data,
-    ~ # Calculating mitochondrial statistics
-      perCellQCMetrics(.x, subsets = list(Mito = which(location == "MT"))) %>%
-      
+Next we calculate the mitchondrial content for each cell in the dataset.
+
+```{r}
+mito_info_one_dataset <- perCellQCMetrics(one_dataset, subsets = list(Mito = which(location == "MT")))
+mito_info_one_dataset
+```
+
+We then label the cells with high mitochondrial content as outliers.
+
+```{r}
+mito_info_one_dataset <- mito_info_one_dataset %>%
       # Converting to tibble
       as_tibble(rownames = "cell") %>%
-
       # Label cells with high mitochondrial content
       mutate(high_mitochondrion = isOutlier(subsets_Mito_percent, type = "higher"))
-  )) %>%
-  
-  # Join the information
-  mutate(data = map2(
-    data, mitochondrion_info,
-    ~ left_join(.x, .y, by = "cell")
-  )) %>%
-  
-  select(-mitochondrion_info) %>%
-  
-  unnest(data)
+mito_info_one_dataset
+```
+
+Finally, we join the mitochondrial information back to the original data so we will be able to filter out the cells with high mitochondrial content.
+
+```{r}
+mito_info_one_dataset <- one_dataset %>%  left_join(mito_info_one_dataset, by = "cell")
+mito_info_one_dataset
+```
+
+In the interest of time, we load the iteration for all datasets.
+
+```{r}
+pbmc <- rpharma2021tidytranscriptomics::pbmc_mito_info_all_datasets
 ```
 
 We can use tidyverse to reshape the data and create [beeswarm plots](http://www.cbs.dtu.dk/~eklund/beeswarm/) to visualise the mitochondrial content.
