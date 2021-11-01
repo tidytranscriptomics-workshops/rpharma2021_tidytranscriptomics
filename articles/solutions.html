@@ -94,24 +94,27 @@
 <h2 class="hasAnchor">
 <a href="#which-method-detects-the-most-differentially-abundant-transcripts-p-value-adjusted-for-multiple-testing-0-05-fdr-adj-p-val-padj" class="anchor"></a>Which method detects the most differentially abundant transcripts, p value adjusted for multiple testing &lt; 0.05 (FDR, adj.P.Val, padj)?</h2>
 <pre><code>de_all %&gt;%
-
+  
   # Subset transcript information
   pivot_transcript() %&gt;%
-
+  
   # Reshape for nesting
   pivot_longer(
-    cols = -c(feature, .abundant, albut, symbol),
+    cols = -c(feature, symbol, .abundant, group:exon_name),
     names_sep = "_",
     names_to = c("method", "statistic"),
     values_to = "value"
   ) %&gt;%
-
+  
   # Filter statistic
-  filter(statistic %in% c("FDR", "adj.P.Val", "padj")) %&gt;%
+  filter(statistic %in% c("FDR", "adj.P.Val", "padj")) %&gt;%  
   filter(value &lt; 0.05) %&gt;%
-
-  # Nesting
-  count(method)</code></pre>
+  
+  # Counting
+  count(method) %&gt;%
+  
+  # Sort
+  arrange(desc(n))</code></pre>
 <p>What is the most abundant cell type overall in BRCA samples?</p>
 <pre><code>BRCA_cell_type_long %&gt;%
   group_by(cell_type) %&gt;%
@@ -139,7 +142,7 @@ mito_info_all_datasets</code></pre>
 <div id="reducing-dimension---umap" class="section level2">
 <h2 class="hasAnchor">
 <a href="#reducing-dimension---umap" class="anchor"></a>Reducing dimension - UMAP</h2>
-<p>UMAP 1 of 2 components has more variability than 3 components</p>
+<p>UMAP 1 of 2 components has <strong>More</strong> variability than 3 components</p>
 <pre><code>left_join(
     pbmc %&gt;%
     runUMAP(ncomponents = 2, dimred="corrected") %&gt;% 
