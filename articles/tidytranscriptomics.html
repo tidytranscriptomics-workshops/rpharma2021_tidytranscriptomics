@@ -1450,35 +1450,89 @@ Select one of the multiple choice options in www.menti.com (code in Google doc).
   keytype <span class="op">=</span> <span class="st">"SYMBOL"</span>
 <span class="op">)</span>
 <span class="co">#&gt; Warning: Unable to map 5313 of 51958 requested IDs.</span></code></pre></div>
+<p>We’ll first show the mitochondrial analysis for one of the 10 datasets.</p>
 <div class="sourceCode" id="cb48"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">pbmc</span> <span class="op">&lt;-</span>
-  <span class="va">pbmc</span> <span class="op"><a href="https://rdrr.io/pkg/tidySingleCellExperiment/man/pipe.html">%&gt;%</a></span>
-
-  <span class="co"># Grouping - nesting by dataset</span>
-  <span class="fu"><a href="https://rdrr.io/pkg/tidySingleCellExperiment/man/tidyr-methods.html">nest</a></span><span class="op">(</span>data <span class="op">=</span> <span class="op">-</span><span class="va">dataset</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/tidySingleCellExperiment/man/pipe.html">%&gt;%</a></span>
-  <span class="fu"><a href="https://rdrr.io/pkg/tidySingleCellExperiment/man/dplyr-methods.html">mutate</a></span><span class="op">(</span>mitochondrion_info <span class="op">=</span> <span class="fu"><a href="https://purrr.tidyverse.org/reference/map.html">map</a></span><span class="op">(</span>
-    <span class="va">data</span>,
-    <span class="op">~</span> <span class="co"># Calculating mitochondrial statistics</span>
-      <span class="fu"><a href="https://rdrr.io/pkg/scuttle/man/perCellQCMetrics.html">perCellQCMetrics</a></span><span class="op">(</span><span class="va">.x</span>, subsets <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>Mito <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/which.html">which</a></span><span class="op">(</span><span class="va">location</span> <span class="op">==</span> <span class="st">"MT"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/tidySingleCellExperiment/man/pipe.html">%&gt;%</a></span>
-      
+<code class="sourceCode R"><span class="va">one_dataset</span> <span class="op">&lt;-</span> <span class="va">pbmc</span> <span class="op"><a href="https://rdrr.io/pkg/tidySingleCellExperiment/man/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://rdrr.io/pkg/tidySingleCellExperiment/man/dplyr-methods.html">filter</a></span><span class="op">(</span><span class="va">dataset</span> <span class="op">==</span><span class="st">"GSE115189"</span><span class="op">)</span></code></pre></div>
+<p>Next we calculate the mitchondrial content for each cell in the dataset.</p>
+<div class="sourceCode" id="cb49"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">mito_info_one_dataset</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/scuttle/man/perCellQCMetrics.html">perCellQCMetrics</a></span><span class="op">(</span><span class="va">one_dataset</span>, subsets <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>Mito <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/which.html">which</a></span><span class="op">(</span><span class="va">location</span> <span class="op">==</span> <span class="st">"MT"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>
+<span class="va">mito_info_one_dataset</span>
+<span class="co">#&gt; DataFrame with 300 rows and 6 columns</span>
+<span class="co">#&gt;                        sum  detected subsets_Mito_sum subsets_Mito_detected</span>
+<span class="co">#&gt;                  &lt;numeric&gt; &lt;integer&gt;        &lt;numeric&gt;             &lt;integer&gt;</span>
+<span class="co">#&gt; CCAGTCACACTGGT-1      3421       979              132                    11</span>
+<span class="co">#&gt; ATGAGCACATCTTC-1      2752       898               33                     9</span>
+<span class="co">#&gt; TATGAATGGAGGAC-1      2114       937               21                     7</span>
+<span class="co">#&gt; CATATAGACTAAGC-1      3122      1086               54                    10</span>
+<span class="co">#&gt; GAGGCAGACTTGCC-1      2341       957               30                    10</span>
+<span class="co">#&gt; ...                    ...       ...              ...                   ...</span>
+<span class="co">#&gt; GATATCCTAGAAGT-1      2432       925               34                    10</span>
+<span class="co">#&gt; GAACCAACTTCCGC-1      1682       819               34                     9</span>
+<span class="co">#&gt; CGACGTCTGAGGCA-1      1136       448               16                     8</span>
+<span class="co">#&gt; TCAGCAGACTCCAC-1      2807       931               30                     9</span>
+<span class="co">#&gt; AACACGTGTACGAC-1      3743      1250              105                    12</span>
+<span class="co">#&gt;                  subsets_Mito_percent     total</span>
+<span class="co">#&gt;                             &lt;numeric&gt; &lt;numeric&gt;</span>
+<span class="co">#&gt; CCAGTCACACTGGT-1             3.858521      3421</span>
+<span class="co">#&gt; ATGAGCACATCTTC-1             1.199128      2752</span>
+<span class="co">#&gt; TATGAATGGAGGAC-1             0.993377      2114</span>
+<span class="co">#&gt; CATATAGACTAAGC-1             1.729660      3122</span>
+<span class="co">#&gt; GAGGCAGACTTGCC-1             1.281504      2341</span>
+<span class="co">#&gt; ...                               ...       ...</span>
+<span class="co">#&gt; GATATCCTAGAAGT-1              1.39803      2432</span>
+<span class="co">#&gt; GAACCAACTTCCGC-1              2.02140      1682</span>
+<span class="co">#&gt; CGACGTCTGAGGCA-1              1.40845      1136</span>
+<span class="co">#&gt; TCAGCAGACTCCAC-1              1.06876      2807</span>
+<span class="co">#&gt; AACACGTGTACGAC-1              2.80524      3743</span></code></pre></div>
+<p>We then label the cells with high mitochondrial content as outliers.</p>
+<div class="sourceCode" id="cb50"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">mito_info_one_dataset</span> <span class="op">&lt;-</span> <span class="va">mito_info_one_dataset</span> <span class="op"><a href="https://rdrr.io/pkg/tidySingleCellExperiment/man/pipe.html">%&gt;%</a></span>
       <span class="co"># Converting to tibble</span>
       <span class="fu"><a href="https://rdrr.io/pkg/tidySingleCellExperiment/man/tibble-methods.html">as_tibble</a></span><span class="op">(</span>rownames <span class="op">=</span> <span class="st">"cell"</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/tidySingleCellExperiment/man/pipe.html">%&gt;%</a></span>
-
       <span class="co"># Label cells with high mitochondrial content</span>
       <span class="fu"><a href="https://rdrr.io/pkg/tidySingleCellExperiment/man/dplyr-methods.html">mutate</a></span><span class="op">(</span>high_mitochondrion <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/scuttle/man/isOutlier.html">isOutlier</a></span><span class="op">(</span><span class="va">subsets_Mito_percent</span>, type <span class="op">=</span> <span class="st">"higher"</span><span class="op">)</span><span class="op">)</span>
-  <span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/tidySingleCellExperiment/man/pipe.html">%&gt;%</a></span>
-  
-  <span class="co"># Join the information</span>
-  <span class="fu"><a href="https://rdrr.io/pkg/tidySingleCellExperiment/man/dplyr-methods.html">mutate</a></span><span class="op">(</span>data <span class="op">=</span> <span class="fu"><a href="https://purrr.tidyverse.org/reference/map2.html">map2</a></span><span class="op">(</span>
-    <span class="va">data</span>, <span class="va">mitochondrion_info</span>,
-    <span class="op">~</span> <span class="fu"><a href="https://rdrr.io/pkg/tidySingleCellExperiment/man/dplyr-methods.html">left_join</a></span><span class="op">(</span><span class="va">.x</span>, <span class="va">.y</span>, by <span class="op">=</span> <span class="st">"cell"</span><span class="op">)</span>
-  <span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/tidySingleCellExperiment/man/pipe.html">%&gt;%</a></span>
-  
-  <span class="fu"><a href="https://rdrr.io/pkg/tidySingleCellExperiment/man/dplyr-methods.html">select</a></span><span class="op">(</span><span class="op">-</span><span class="va">mitochondrion_info</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/pkg/tidySingleCellExperiment/man/pipe.html">%&gt;%</a></span>
-  
-  <span class="fu"><a href="https://rdrr.io/pkg/tidySingleCellExperiment/man/tidyr-methods.html">unnest</a></span><span class="op">(</span><span class="va">data</span><span class="op">)</span></code></pre></div>
+<span class="va">mito_info_one_dataset</span>
+<span class="co">#&gt; # A tibble: 300 × 8</span>
+<span class="co">#&gt;    cell    sum detected subsets_Mito_sum subsets_Mito_de… subsets_Mito_pe… total</span>
+<span class="co">#&gt;    &lt;chr&gt; &lt;dbl&gt;    &lt;int&gt;            &lt;dbl&gt;            &lt;int&gt;            &lt;dbl&gt; &lt;dbl&gt;</span>
+<span class="co">#&gt;  1 CCAG…  3421      979              132               11            3.86   3421</span>
+<span class="co">#&gt;  2 ATGA…  2752      898               33                9            1.20   2752</span>
+<span class="co">#&gt;  3 TATG…  2114      937               21                7            0.993  2114</span>
+<span class="co">#&gt;  4 CATA…  3122     1086               54               10            1.73   3122</span>
+<span class="co">#&gt;  5 GAGG…  2341      957               30               10            1.28   2341</span>
+<span class="co">#&gt;  6 AGCT…  5472     1758              169               13            3.09   5472</span>
+<span class="co">#&gt;  7 TGAT…  1258      542               41                9            3.26   1258</span>
+<span class="co">#&gt;  8 ACGA…  7683     1926              276               14            3.59   7683</span>
+<span class="co">#&gt;  9 CGGC…  3500     1092               75               10            2.14   3500</span>
+<span class="co">#&gt; 10 ATAG…  3092      974               37               10            1.20   3092</span>
+<span class="co">#&gt; # … with 290 more rows, and 1 more variable: high_mitochondrion &lt;otlr.flt&gt;</span></code></pre></div>
+<p>Finally, we join the mitochondrial information back to the original data so we will be able to filter out the cells with high mitochondrial content.</p>
+<div class="sourceCode" id="cb51"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">mito_info_one_dataset</span> <span class="op">&lt;-</span> <span class="va">one_dataset</span> <span class="op"><a href="https://rdrr.io/pkg/tidySingleCellExperiment/man/pipe.html">%&gt;%</a></span>  <span class="fu"><a href="https://rdrr.io/pkg/tidySingleCellExperiment/man/dplyr-methods.html">left_join</a></span><span class="op">(</span><span class="va">mito_info_one_dataset</span>, by <span class="op">=</span> <span class="st">"cell"</span><span class="op">)</span>
+<span class="va">mito_info_one_dataset</span>
+<span class="co">#&gt; # A SingleCellExperiment-tibble abstraction: 300 × 17</span>
+<span class="co">#&gt; [90m# Features=51958 | Assays=counts, logcounts[39m</span>
+<span class="co">#&gt;    cell  dataset groups sample orig.ident nCount_RNA nFeature_RNA  S.Score</span>
+<span class="co">#&gt;    &lt;chr&gt; &lt;chr&gt;   &lt;chr&gt;  &lt;chr&gt;  &lt;chr&gt;           &lt;dbl&gt;        &lt;int&gt;    &lt;dbl&gt;</span>
+<span class="co">#&gt;  1 CCAG… GSE115… 1      GSE11… SeuratPro…       3421          979 -5.42e-2</span>
+<span class="co">#&gt;  2 ATGA… GSE115… 2      GSE11… SeuratPro…       2752          898 -5.01e-2</span>
+<span class="co">#&gt;  3 TATG… GSE115… 2      GSE11… SeuratPro…       2114          937 -2.95e-5</span>
+<span class="co">#&gt;  4 CATA… GSE115… 1      GSE11… SeuratPro…       3122         1086 -6.65e-2</span>
+<span class="co">#&gt;  5 GAGG… GSE115… 2      GSE11… SeuratPro…       2341          957 -3.74e-3</span>
+<span class="co">#&gt;  6 AGCT… GSE115… 1      GSE11… SeuratPro…       5472         1758 -5.88e-2</span>
+<span class="co">#&gt;  7 TGAT… GSE115… 1      GSE11… SeuratPro…       1258          542 -2.51e-2</span>
+<span class="co">#&gt;  8 ACGA… GSE115… 1      GSE11… SeuratPro…       7683         1926 -1.33e-1</span>
+<span class="co">#&gt;  9 CGGC… GSE115… 1      GSE11… SeuratPro…       3500         1092 -6.87e-2</span>
+<span class="co">#&gt; 10 ATAG… GSE115… 1      GSE11… SeuratPro…       3092          974 -1.24e-2</span>
+<span class="co">#&gt; # … with 290 more rows, and 9 more variables: G2M.Score &lt;dbl&gt;, ident &lt;fct&gt;,</span>
+<span class="co">#&gt; #   sum &lt;dbl&gt;, detected &lt;int&gt;, subsets_Mito_sum &lt;dbl&gt;,</span>
+<span class="co">#&gt; #   subsets_Mito_detected &lt;int&gt;, subsets_Mito_percent &lt;dbl&gt;, total &lt;dbl&gt;,</span>
+<span class="co">#&gt; #   high_mitochondrion &lt;otlr.flt&gt;</span></code></pre></div>
+<p>In the interest of time, we load the iteration for all datasets.</p>
+<div class="sourceCode" id="cb52"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">pbmc</span> <span class="op">&lt;-</span> <span class="fu">rpharma2021tidytranscriptomics</span><span class="fu">::</span><span class="va"><a href="../reference/pbmc_mito_info_all_datasets.html">pbmc_mito_info_all_datasets</a></span></code></pre></div>
 <p>We can use tidyverse to reshape the data and create <a href="http://www.cbs.dtu.dk/~eklund/beeswarm/">beeswarm plots</a> to visualise the mitochondrial content.</p>
-<div class="sourceCode" id="cb49"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb53"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">pbmc</span> <span class="op"><a href="https://rdrr.io/pkg/tidySingleCellExperiment/man/pipe.html">%&gt;%</a></span>
 
   <span class="co"># Reshaping</span>
@@ -1500,17 +1554,17 @@ Select one of the multiple choice options in www.menti.com (code in Google doc).
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html">theme_bw</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span>
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html">theme</a></span><span class="op">(</span>axis.text.x <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html">element_text</a></span><span class="op">(</span>angle <span class="op">=</span> <span class="fl">50</span>, hjust <span class="op">=</span> <span class="fl">1</span>, vjust <span class="op">=</span> <span class="fl">1</span><span class="op">)</span><span class="op">)</span>
 <span class="co">#&gt; tidySingleCellExperiment says: A data frame is returned for independent data analysis.</span></code></pre></div>
-<p><img src="tidytranscriptomics_files/figure-html/unnamed-chunk-64-1.png" width="700"></p>
+<p><img src="tidytranscriptomics_files/figure-html/unnamed-chunk-68-1.png" width="700"></p>
 <p>In the faceted plot, “detected” is the number of genes in each of the 10 datasets, “sum” is the total counts.</p>
 <p>We then proceed to filter out cells with high mitochondrial content.</p>
-<div class="sourceCode" id="cb50"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb54"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">pbmc</span> <span class="op">&lt;-</span> <span class="va">pbmc</span> <span class="op"><a href="https://rdrr.io/pkg/tidySingleCellExperiment/man/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://rdrr.io/pkg/tidySingleCellExperiment/man/dplyr-methods.html">filter</a></span><span class="op">(</span><span class="op">!</span><span class="va">high_mitochondrion</span><span class="op">)</span></code></pre></div>
 </div>
 <div id="scaling-and-integrating" class="section level2">
 <h2 class="hasAnchor">
 <a href="#scaling-and-integrating" class="anchor"></a>Scaling and Integrating</h2>
 <p>As we are working with multiple datasets, we need to integrate them and adjust for technical variability between them. Here we’ll nest by dataset (batch), normalise within each batch with <code>multiBatchNorm</code> and correct for batch effects with <code>fastMNN</code>.</p>
-<div class="sourceCode" id="cb51"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb55"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># Scaling within each dataset</span>
 <span class="va">pbmc</span> <span class="op">&lt;-</span>
   <span class="va">pbmc</span> <span class="op"><a href="https://rdrr.io/pkg/tidySingleCellExperiment/man/pipe.html">%&gt;%</a></span>
@@ -1532,7 +1586,7 @@ Select one of the multiple choice options in www.menti.com (code in Google doc).
 <h2 class="hasAnchor">
 <a href="#identify-clusters" class="anchor"></a>Identify clusters</h2>
 <p>We proceed with identifying cell clusters.</p>
-<div class="sourceCode" id="cb52"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb56"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># Assign clusters to the 'colLabels'</span>
 <span class="co"># of the SingleCellExperiment object</span>
 <span class="fu"><a href="https://rdrr.io/pkg/SingleCellExperiment/man/colLabels.html">colLabels</a></span><span class="op">(</span><span class="va">pbmc</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="co"># from SingleCellExperiment</span>
@@ -1548,46 +1602,47 @@ Select one of the multiple choice options in www.menti.com (code in Google doc).
 <span class="co">#&gt; [90m# Features=51958 | Assays=reconstructed[39m</span>
 <span class="co">#&gt;    cell  label batch groups sample orig.ident nCount_RNA nFeature_RNA  S.Score</span>
 <span class="co">#&gt;    &lt;chr&gt; &lt;fct&gt; &lt;int&gt; &lt;chr&gt;  &lt;chr&gt;  &lt;chr&gt;           &lt;dbl&gt;        &lt;int&gt;    &lt;dbl&gt;</span>
-<span class="co">#&gt;  1 CCAG… 3         1 1      GSE11… SeuratPro…       3421          979 -5.42e-2</span>
-<span class="co">#&gt;  2 ATGA… 6         1 2      GSE11… SeuratPro…       2752          898 -5.01e-2</span>
-<span class="co">#&gt;  3 TATG… 7         1 2      GSE11… SeuratPro…       2114          937 -2.95e-5</span>
-<span class="co">#&gt;  4 CATA… 12        1 1      GSE11… SeuratPro…       3122         1086 -6.65e-2</span>
-<span class="co">#&gt;  5 GAGG… 2         1 2      GSE11… SeuratPro…       2341          957 -3.74e-3</span>
+<span class="co">#&gt;  1 CCAG… 4         1 1      GSE11… SeuratPro…       3421          979 -5.42e-2</span>
+<span class="co">#&gt;  2 ATGA… 7         1 2      GSE11… SeuratPro…       2752          898 -5.01e-2</span>
+<span class="co">#&gt;  3 TATG… 6         1 2      GSE11… SeuratPro…       2114          937 -2.95e-5</span>
+<span class="co">#&gt;  4 CATA… 13        1 1      GSE11… SeuratPro…       3122         1086 -6.65e-2</span>
+<span class="co">#&gt;  5 GAGG… 1         1 2      GSE11… SeuratPro…       2341          957 -3.74e-3</span>
 <span class="co">#&gt;  6 AGCT… 5         1 1      GSE11… SeuratPro…       5472         1758 -5.88e-2</span>
-<span class="co">#&gt;  7 TGAT… 1         1 1      GSE11… SeuratPro…       1258          542 -2.51e-2</span>
-<span class="co">#&gt;  8 ACGA… 1         1 1      GSE11… SeuratPro…       7683         1926 -1.33e-1</span>
-<span class="co">#&gt;  9 CGGC… 3         1 1      GSE11… SeuratPro…       3500         1092 -6.87e-2</span>
-<span class="co">#&gt; 10 ATAG… 3         1 1      GSE11… SeuratPro…       3092          974 -1.24e-2</span>
+<span class="co">#&gt;  7 TGAT… 2         1 1      GSE11… SeuratPro…       1258          542 -2.51e-2</span>
+<span class="co">#&gt;  8 ACGA… 2         1 1      GSE11… SeuratPro…       7683         1926 -1.33e-1</span>
+<span class="co">#&gt;  9 CGGC… 4         1 1      GSE11… SeuratPro…       3500         1092 -6.87e-2</span>
+<span class="co">#&gt; 10 ATAG… 4         1 1      GSE11… SeuratPro…       3092          974 -1.24e-2</span>
 <span class="co">#&gt; # … with 2,889 more rows, and 15 more variables: G2M.Score &lt;dbl&gt;, ident &lt;fct&gt;,</span>
 <span class="co">#&gt; #   sum &lt;dbl&gt;, detected &lt;int&gt;, subsets_Mito_sum &lt;dbl&gt;,</span>
 <span class="co">#&gt; #   subsets_Mito_detected &lt;int&gt;, subsets_Mito_percent &lt;dbl&gt;, total &lt;dbl&gt;,</span>
 <span class="co">#&gt; #   high_mitochondrion &lt;lgl&gt;, dataset &lt;chr&gt;, corrected1 &lt;dbl&gt;,</span>
 <span class="co">#&gt; #   corrected2 &lt;dbl&gt;, corrected3 &lt;dbl&gt;, corrected4 &lt;dbl&gt;, corrected5 &lt;dbl&gt;</span></code></pre></div>
 <p>Thanks to tidySingleCellExperiment we can interrogate the object with tidyverse commands and use <code>count</code> to count the number of cells in each cluster.</p>
-<div class="sourceCode" id="cb53"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb57"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">pbmc</span> <span class="op"><a href="https://rdrr.io/pkg/tidySingleCellExperiment/man/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://rdrr.io/pkg/tidySingleCellExperiment/man/count.html">count</a></span><span class="op">(</span><span class="va">label</span><span class="op">)</span>
 <span class="co">#&gt; tidySingleCellExperiment says: A data frame is returned for independent data analysis.</span>
-<span class="co">#&gt; # A tibble: 12 × 2</span>
+<span class="co">#&gt; # A tibble: 13 × 2</span>
 <span class="co">#&gt;    label     n</span>
 <span class="co">#&gt;    &lt;fct&gt; &lt;int&gt;</span>
-<span class="co">#&gt;  1 1       367</span>
-<span class="co">#&gt;  2 2       483</span>
-<span class="co">#&gt;  3 3       339</span>
-<span class="co">#&gt;  4 4        21</span>
-<span class="co">#&gt;  5 5       469</span>
-<span class="co">#&gt;  6 6       506</span>
-<span class="co">#&gt;  7 7       255</span>
-<span class="co">#&gt;  8 8        74</span>
-<span class="co">#&gt;  9 9        41</span>
-<span class="co">#&gt; 10 10      304</span>
-<span class="co">#&gt; 11 11       14</span>
-<span class="co">#&gt; 12 12       26</span></code></pre></div>
+<span class="co">#&gt;  1 1       417</span>
+<span class="co">#&gt;  2 2       350</span>
+<span class="co">#&gt;  3 3        16</span>
+<span class="co">#&gt;  4 4       339</span>
+<span class="co">#&gt;  5 5       495</span>
+<span class="co">#&gt;  6 6       277</span>
+<span class="co">#&gt;  7 7       517</span>
+<span class="co">#&gt;  8 8        21</span>
+<span class="co">#&gt;  9 9        74</span>
+<span class="co">#&gt; 10 10       41</span>
+<span class="co">#&gt; 11 11      312</span>
+<span class="co">#&gt; 12 12       14</span>
+<span class="co">#&gt; 13 13       26</span></code></pre></div>
 </div>
 <div id="reduce-dimensions" class="section level2">
 <h2 class="hasAnchor">
 <a href="#reduce-dimensions" class="anchor"></a>Reduce dimensions</h2>
 <p>Besides PCA which is a linear dimensionality reduction, we can apply neighbour aware methods such as UMAP, to better define locally similar cells.</p>
-<div class="sourceCode" id="cb54"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb58"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># Calculate UMAP with scater</span>
 <span class="va">pbmc</span> <span class="op"><a href="https://rdrr.io/pkg/tidySingleCellExperiment/man/pipe.html">%&gt;%</a></span>
 <span class="fu"><a href="https://rdrr.io/pkg/scater/man/runUMAP.html">runUMAP</a></span><span class="op">(</span>ncomponents <span class="op">=</span> <span class="fl">2</span>, dimred<span class="op">=</span><span class="st">"corrected"</span><span class="op">)</span> <span class="co"># from scater</span>
@@ -1615,13 +1670,13 @@ Select one of the multiple choice options in www.menti.com (code in Google doc).
 Select one of the multiple choice options in www.menti.com (code in Google doc).</code></pre>
 <p><strong>Tip: your can use as_tibble() to convert the tibble abstraction to a simple (and light) cell-wise tibble</strong></p>
 <p>We can calculate the first 3 UMAP dimensions using the scater framework.</p>
-<div class="sourceCode" id="cb56"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb60"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># Calculate UMAP with scater</span>
 <span class="va">pbmc</span> <span class="op">&lt;-</span>
   <span class="va">pbmc</span> <span class="op"><a href="https://rdrr.io/pkg/tidySingleCellExperiment/man/pipe.html">%&gt;%</a></span>
   <span class="fu"><a href="https://rdrr.io/pkg/scater/man/runUMAP.html">runUMAP</a></span><span class="op">(</span>ncomponents <span class="op">=</span> <span class="fl">3</span>, dimred<span class="op">=</span><span class="st">"corrected"</span><span class="op">)</span> <span class="co"># from scater</span></code></pre></div>
 <p>And we can plot the clusters as a 3D plot using plotly. This time we are colouring by estimated cluster labels to visually check the cluster labels.</p>
-<div class="sourceCode" id="cb57"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb61"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">pbmc</span> <span class="op"><a href="https://rdrr.io/pkg/tidySingleCellExperiment/man/pipe.html">%&gt;%</a></span>
   <span class="fu"><a href="https://rdrr.io/pkg/tidySingleCellExperiment/man/plot_ly.html">plot_ly</a></span><span class="op">(</span>
     x <span class="op">=</span> <span class="op">~</span><span class="va">`UMAP1`</span>,
@@ -1640,7 +1695,7 @@ Select one of the multiple choice options in www.menti.com (code in Google doc).
 <h3 class="hasAnchor">
 <a href="#manual-cell-type-classification" class="anchor"></a>Manual cell type classification</h3>
 <p>We can identify cluster markers (genes). As example, we are selecting the top 10 for each cluster. We can then plot a heatmap of those gene markers across cells.</p>
-<div class="sourceCode" id="cb58"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb62"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># Identify top 10 markers per cluster</span>
 <span class="va">marker_genes</span> <span class="op">&lt;-</span>
     <span class="va">pbmc</span> <span class="op"><a href="https://rdrr.io/pkg/tidySingleCellExperiment/man/pipe.html">%&gt;%</a></span>
@@ -1657,13 +1712,13 @@ Select one of the multiple choice options in www.menti.com (code in Google doc).
     colour_columns_by<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"label"</span><span class="op">)</span>,
     exprs_values  <span class="op">=</span> <span class="st">"reconstructed"</span>
   <span class="op">)</span></code></pre></div>
-<p><img src="tidytranscriptomics_files/figure-html/unnamed-chunk-68-1.png" width="700"></p>
+<p><img src="tidytranscriptomics_files/figure-html/unnamed-chunk-72-1.png" width="700"></p>
 </div>
 <div id="automatic-cell-type-classification" class="section level3">
 <h3 class="hasAnchor">
 <a href="#automatic-cell-type-classification" class="anchor"></a>Automatic cell type classification</h3>
 <p>We can infer cell type identities (e.g. T cell) using <em>SingleR</em> <span class="citation">(Aran et al. 2019)</span> and manipulate the output using tidyverse. SingleR <a href="https://bioconductor.org/packages/devel/bioc/vignettes/SingleR/inst/doc/SingleR.html">accepts any log-normalised transcript abundance matrix</a></p>
-<div class="sourceCode" id="cb59"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb63"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># Reference cell types</span>
 <span class="va">blueprint</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/SingleR/man/datasets.html">BlueprintEncodeData</a></span><span class="op">(</span><span class="op">)</span>
 <span class="co">#&gt; snapshotDate(): 2021-10-18</span>
@@ -1690,23 +1745,24 @@ Select one of the multiple choice options in www.menti.com (code in Google doc).
   <span class="fu"><a href="https://rdrr.io/pkg/tidySingleCellExperiment/man/dplyr-methods.html">select</a></span><span class="op">(</span><span class="va">label</span>, <span class="va">first.labels</span><span class="op">)</span>
 
 <span class="va">cell_type</span>
-<span class="co">#&gt; # A tibble: 12 × 2</span>
+<span class="co">#&gt; # A tibble: 13 × 2</span>
 <span class="co">#&gt;    label first.labels   </span>
 <span class="co">#&gt;    &lt;chr&gt; &lt;chr&gt;          </span>
-<span class="co">#&gt;  1 1     B-cells        </span>
-<span class="co">#&gt;  2 2     NK cells       </span>
-<span class="co">#&gt;  3 3     Monocytes      </span>
-<span class="co">#&gt;  4 4     Smooth muscle  </span>
+<span class="co">#&gt;  1 1     NK cells       </span>
+<span class="co">#&gt;  2 2     B-cells        </span>
+<span class="co">#&gt;  3 3     B-cells        </span>
+<span class="co">#&gt;  4 4     Monocytes      </span>
 <span class="co">#&gt;  5 5     Fibroblasts    </span>
-<span class="co">#&gt;  6 6     Skeletal muscle</span>
-<span class="co">#&gt;  7 7     NK cells       </span>
-<span class="co">#&gt;  8 8     Neutrophils    </span>
-<span class="co">#&gt;  9 9     Macrophages    </span>
-<span class="co">#&gt; 10 10    Skeletal muscle</span>
-<span class="co">#&gt; 11 11    B-cells        </span>
-<span class="co">#&gt; 12 12    Monocytes</span></code></pre></div>
+<span class="co">#&gt;  6 6     NK cells       </span>
+<span class="co">#&gt;  7 7     Skeletal muscle</span>
+<span class="co">#&gt;  8 8     Smooth muscle  </span>
+<span class="co">#&gt;  9 9     Neutrophils    </span>
+<span class="co">#&gt; 10 10    Macrophages    </span>
+<span class="co">#&gt; 11 11    Skeletal muscle</span>
+<span class="co">#&gt; 12 12    B-cells        </span>
+<span class="co">#&gt; 13 13    Monocytes</span></code></pre></div>
 <p>We join the cell type information to our pbmc data.</p>
-<div class="sourceCode" id="cb60"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb64"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># Join cell type info</span>
 <span class="va">pbmc</span> <span class="op">&lt;-</span>
   <span class="va">pbmc</span> <span class="op"><a href="https://rdrr.io/pkg/tidySingleCellExperiment/man/pipe.html">%&gt;%</a></span>
@@ -1747,12 +1803,12 @@ Select one of the multiple choice options in www.menti.com (code in Google doc).
 <h3 class="hasAnchor">
 <a href="#data-exploration-using-pseudobulk-samples" class="anchor"></a>Data exploration using pseudobulk samples</h3>
 <p>To do this, we will use a helper function called aggregate_cells, available in this workshop package, to create a group for each sample.</p>
-<div class="sourceCode" id="cb62"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb66"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># Aggregate</span>
 <span class="va">pbmc_bulk</span> <span class="op">&lt;-</span>
   <span class="fu">rpharma2021tidytranscriptomics</span><span class="fu">::</span><span class="va"><a href="../reference/pbmc.html">pbmc</a></span> <span class="op"><a href="https://rdrr.io/pkg/tidySingleCellExperiment/man/pipe.html">%&gt;%</a></span>
   <span class="fu">rpharma2021tidytranscriptomics</span><span class="fu">::</span><span class="fu">aggregate_cells</span><span class="op">(</span><span class="va">file</span><span class="op">)</span></code></pre></div>
-<div class="sourceCode" id="cb63"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb67"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">pbmc_bulk</span> <span class="op"><a href="https://rdrr.io/pkg/tidySingleCellExperiment/man/pipe.html">%&gt;%</a></span>
 
   <span class="co"># Tidybulk operations</span>
@@ -1783,14 +1839,14 @@ Select one of the multiple choice options in www.menti.com (code in Google doc).
 <p>In Part 2 we showed how we can study the cell-type composition of a biological sample using bulk RNA sequencing. Single cell sequencing enables a more direct estimation of cell-type composition and gives greater resolution. For bulk RNA sequencing we need to infer the cell types using the abundance of transcripts in the whole sample, with single-cell RNA sequencing we can directly measure the transcripts in each cell and then classify the cells into cell types.</p>
 <p>Seurat is a very popular analysis toolkit for single cell RNA sequencing data <span class="citation">(Butler et al. 2018; Stuart et al. 2019)</span> .</p>
 <p>tidyseurat provides a bridge between the Seurat single-cell package <span class="citation">(Butler et al. 2018; Stuart et al. 2019)</span> and the tidyverse <span class="citation">(Wickham et al. 2019)</span>. It creates an invisible layer that enables viewing the Seurat object as a tidyverse tibble, and provides Seurat-compatible <em>dplyr</em>, <em>tidyr</em>, <em>ggplot</em> and <em>plotly</em> functions.</p>
-<div class="sourceCode" id="cb64"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb68"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">pbmc_seurat</span> <span class="op">&lt;-</span> <span class="fu">rpharma2021tidytranscriptomics</span><span class="fu">::</span><span class="va"><a href="../reference/pbmc_seurat.html">pbmc_seurat</a></span>
 <span class="co">#&gt; Registered S3 method overwritten by 'spatstat.geom':</span>
 <span class="co">#&gt;   method     from</span>
 <span class="co">#&gt;   print.boxx cli</span></code></pre></div>
-<div class="sourceCode" id="cb65"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb69"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/stemangiola/tidyseurat">tidyseurat</a></span><span class="op">)</span></code></pre></div>
-<div class="sourceCode" id="cb66"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb70"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">pbmc_seurat</span>
 <span class="co">#&gt; # A Seurat-tibble abstraction: 80 × 9</span>
 <span class="co">#&gt; [90m# Features=230 | Active assay=RNA | Assays=RNA[39m</span>
@@ -1808,7 +1864,7 @@ Select one of the multiple choice options in www.menti.com (code in Google doc).
 <span class="co">#&gt; 10 AATG… SeuratPro…        100           41 0               A             g1    </span>
 <span class="co">#&gt; # … with 70 more rows, and 2 more variables: RNA_snn_res.1 &lt;fct&gt;, file &lt;chr&gt;</span></code></pre></div>
 <p>It can be interacted with using <a href="https://bioconductor.org/packages/release/bioc/vignettes/SingleCellExperiment/inst/doc/intro.html">SingleCellExperiment commands</a> such as <code>assayNames</code>.</p>
-<div class="sourceCode" id="cb67"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb71"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://satijalab.org/seurat/reference/ObjectAccess.html">Assays</a></span><span class="op">(</span><span class="va">pbmc_seurat</span><span class="op">)</span>
 <span class="co">#&gt; [1] "RNA"</span></code></pre></div>
 <p>We can also interact with our object as we do with any tidyverse tibble.</p>
@@ -1816,7 +1872,7 @@ Select one of the multiple choice options in www.menti.com (code in Google doc).
 <h3 class="hasAnchor">
 <a href="#tidyverse-commands-2" class="anchor"></a>Tidyverse commands</h3>
 <p>We can interact to this object in the same way we interact with <code>SingleCellExperiment</code>, through the tidy paradigm</p>
-<div class="sourceCode" id="cb68"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb72"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># Filter</span>
 <span class="va">pbmc_seurat</span> <span class="op"><a href="https://rdrr.io/pkg/tidyseurat/man/pipe.html">%&gt;%</a></span> <span class="fu"><a href="https://rdrr.io/pkg/tidyseurat/man/dplyr-methods.html">filter</a></span><span class="op">(</span><span class="va">groups</span> <span class="op">==</span> <span class="st">"g1"</span><span class="op">)</span>
 <span class="co">#&gt; # A Seurat-tibble abstraction: 44 × 9</span>
@@ -1921,7 +1977,7 @@ Select one of the multiple choice options in www.menti.com (code in Google doc).
 <h1 class="hasAnchor">
 <a href="#reproducibility" class="anchor"></a>Reproducibility</h1>
 <p>Record package and version information with <code>sessionInfo</code></p>
-<div class="sourceCode" id="cb69"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb73"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/sessionInfo.html">sessionInfo</a></span><span class="op">(</span><span class="op">)</span>
 <span class="co">#&gt; R version 4.1.1 (2021-08-10)</span>
 <span class="co">#&gt; Platform: x86_64-pc-linux-gnu (64-bit)</span>
