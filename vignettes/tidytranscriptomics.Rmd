@@ -227,7 +227,7 @@ knitr::include_graphics("../inst/vignettes/roadmap_integration.png")
 
 # Part 1 Bulk RNA sequencing with tidySummarizedExperiment and tidybulk
 
-```{r, echo=FALSE, out.width = "100px"}
+```{r, echo=FALSE, out.width = "600px", fig.cap="[Tidy Transcriptomics blog](https://stemangiola.github.io/tidytranscriptomics/)"}
 knitr::include_graphics("../inst/vignettes/blog_screenshot.PNG")
 ```
 
